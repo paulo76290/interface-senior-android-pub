@@ -159,7 +159,7 @@ document.querySelectorAll("[data-action]").forEach((button) => {
     const action = button.dataset.action;
 
     if (action === "emergency") {
-      window.location.href = "intent://open/#Intent;scheme=teamviewer;package=com.teamviewer.quicksupport;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.teamviewer.quicksupport;end";
+      window.location.href = "intent://#Intent;package=com.teamviewer.quicksupport;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.teamviewer.quicksupport;end";
       return;
     }
   });

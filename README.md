@@ -37,4 +37,4 @@ Le bouton Mail Orange tente d'ouvrir l'application associée à `mail.orange.fr`
 
 Le bouton Play Store tente d'ouvrir directement l'application Google Play Store.
 
-Le bouton Urgence tente d'ouvrir TeamViewer QuickSupport. Si l'application n'est pas installée, Android redirige vers le Play Store.
+Le bouton Urgence tente de lancer directement l'application TeamViewer QuickSupport. Si l'application n'est pas installée, Android redirige vers le Play Store.
