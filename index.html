@@ -68,19 +68,12 @@
     </dialog>
 
     <dialog class="dialog wide-dialog" id="photosDialog" aria-labelledby="photosTitle">
-      <h2 id="photosTitle">Photos Mathilda</h2>
-      <div class="album-list" id="albumList"></div>
-      <form class="album-form" id="albumForm">
-        <label>
-          Nom de l'album
-          <input id="albumNameInput" name="albumName" type="text" placeholder="Mathilda 2025" autocomplete="off" required>
-        </label>
-        <label>
-          Lien de l'album
-          <input id="albumUrlInput" name="albumUrl" type="url" placeholder="https://..." autocomplete="off" required>
-        </label>
-        <button class="secondary-button" type="submit">Ajouter l'album</button>
-      </form>
+      <h2 id="photosTitle">Photo</h2>
+      <div class="photo-gallery" id="photoGallery"></div>
+      <label class="file-button">
+        Ajouter des images
+        <input id="photoInput" type="file" accept="image/*" multiple>
+      </label>
       <button class="primary-button" id="closePhotosButton" type="button">Retour</button>
     </dialog>
 

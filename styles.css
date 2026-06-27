@@ -336,33 +336,20 @@ button:hover {
   box-shadow: 0 8px 0 rgba(32, 33, 36, 0.16);
 }
 
-.album-list {
+.photo-gallery {
   display: grid;
   gap: 12px;
   margin-top: 18px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.album-link {
-  display: grid;
-  min-height: 86px;
-  align-content: center;
-  gap: 4px;
-  padding: 16px;
+.local-photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
   border: 2px solid var(--line);
   border-radius: 8px;
-  background: #fff7e4;
-}
-
-.album-year {
-  font-size: clamp(1.55rem, 3vw, 2.2rem);
-  font-weight: 900;
-}
-
-.album-name {
-  color: var(--muted);
-  font-size: 1rem;
-  font-weight: 800;
+  object-fit: cover;
+  background: var(--white);
 }
 
 .empty-message {
@@ -377,36 +364,11 @@ button:hover {
   text-align: center;
 }
 
-.album-form {
+.file-button {
   display: grid;
-  gap: 12px;
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 2px solid var(--line);
-}
-
-.album-form label {
-  display: grid;
-  gap: 6px;
-  color: var(--muted);
-  font-size: 1rem;
-  font-weight: 900;
-}
-
-.album-form input {
-  width: 100%;
-  min-height: 54px;
-  padding: 10px 12px;
-  border: 2px solid var(--line);
-  border-radius: 8px;
-  color: var(--ink);
-  font: inherit;
-  font-size: 1.05rem;
-  font-weight: 700;
-}
-
-.secondary-button {
   min-height: 58px;
+  margin-top: 18px;
+  place-items: center;
   border: 2px solid var(--ink);
   border-radius: 8px;
   background: var(--white);
@@ -416,6 +378,13 @@ button:hover {
   font-size: 1.08rem;
   font-weight: 900;
   box-shadow: 0 8px 0 rgba(32, 33, 36, 0.16);
+}
+
+.file-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
 }
 
 @media (max-width: 760px) {
@@ -436,7 +405,7 @@ button:hover {
   .quick-actions,
   .contacts,
   .lower-band,
-  .album-list {
+  .photo-gallery {
     grid-template-columns: 1fr;
   }
 

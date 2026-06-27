@@ -31,7 +31,7 @@ Le bouton Teams ouvre les contacts favoris Teams. Le bouton "Ouvrir Teams" tente
 
 Le bouton WhatsApp tente d'ouvrir l'application WhatsApp. Si elle n'est pas installée, Android redirige vers le Play Store.
 
-Le bouton Photos ouvre une liste d'albums personnalisable. Les albums peuvent être ajoutés depuis l'interface avec un nom et un lien; ils sont conservés dans le navigateur de la tablette.
+Le bouton Photos ouvre une galerie locale. Les images peuvent être ajoutées depuis le sélecteur de photos de la tablette; elles sont conservées localement dans le navigateur de la tablette.
 
 Le bouton Mail Orange tente d'ouvrir l'application associée à `mail.orange.fr`. Si aucune application ne prend ce lien, Chrome ouvre le webmail Orange.
 

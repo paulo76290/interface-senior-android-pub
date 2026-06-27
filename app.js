@@ -9,12 +9,11 @@ const noticeText = document.querySelector("#noticeText");
 const closeNoticeButton = document.querySelector("#closeNoticeButton");
 const photosButton = document.querySelector("#photosButton");
 const photosDialog = document.querySelector("#photosDialog");
-const albumList = document.querySelector("#albumList");
-const albumForm = document.querySelector("#albumForm");
-const albumNameInput = document.querySelector("#albumNameInput");
-const albumUrlInput = document.querySelector("#albumUrlInput");
+const photoGallery = document.querySelector("#photoGallery");
+const photoInput = document.querySelector("#photoInput");
 const closePhotosButton = document.querySelector("#closePhotosButton");
-const ALBUM_STORAGE_KEY = "tablette-simple-photo-albums";
+const PHOTO_DB_NAME = "tablette-simple-photos";
+const PHOTO_STORE_NAME = "photos";
 
 const contacts = [
   {
@@ -33,8 +32,6 @@ const contacts = [
     href: "intent://teams.microsoft.com/#Intent;scheme=https;package=com.microsoft.teams;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.microsoft.teams;end"
   }
 ];
-
-let photoAlbums = loadPhotoAlbums();
 
 const dateFormatter = new Intl.DateTimeFormat("fr-BE", {
   weekday: "long",
@@ -72,86 +69,107 @@ contactsEl.innerHTML = contacts
   })
   .join("");
 
-function loadPhotoAlbums() {
-  try {
-    return JSON.parse(localStorage.getItem(ALBUM_STORAGE_KEY)) || [];
-  } catch {
-    return [];
-  }
-}
-
-function savePhotoAlbums() {
-  localStorage.setItem(ALBUM_STORAGE_KEY, JSON.stringify(photoAlbums));
-}
-
-function normalizeAlbumUrl(url) {
-  const trimmedUrl = url.trim();
-  if (/^https?:\/\//i.test(trimmedUrl)) {
-    return trimmedUrl;
-  }
-
-  return `https://${trimmedUrl}`;
-}
-
-function renderPhotoAlbums() {
-  albumList.innerHTML = "";
-
-  if (photoAlbums.length === 0) {
-    const emptyMessage = document.createElement("p");
-    emptyMessage.className = "empty-message";
-    emptyMessage.textContent = "Aucun album ajouté pour le moment.";
-    albumList.append(emptyMessage);
-    return;
-  }
-
-  photoAlbums.forEach((album) => {
-    const albumLink = document.createElement("a");
-    albumLink.className = "album-link";
-    albumLink.href = album.href;
-    albumLink.target = "_blank";
-    albumLink.rel = "noopener";
-
-    const albumTitle = document.createElement("span");
-    albumTitle.className = "album-year";
-    albumTitle.textContent = album.name;
-
-    const albumSubtitle = document.createElement("span");
-    albumSubtitle.className = "album-name";
-    albumSubtitle.textContent = "Album photos";
-
-    albumLink.append(albumTitle, albumSubtitle);
-    albumList.append(albumLink);
-  });
-}
-
-renderPhotoAlbums();
-
 function showNotice(message) {
   noticeText.textContent = message;
   noticeDialog.showModal();
 }
 
-teamsButton.addEventListener("click", () => teamsDialog.showModal());
-closeTeamsButton.addEventListener("click", () => teamsDialog.close());
-closeNoticeButton.addEventListener("click", () => noticeDialog.close());
-photosButton.addEventListener("click", () => photosDialog.showModal());
-closePhotosButton.addEventListener("click", () => photosDialog.close());
+function openPhotoDb() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(PHOTO_DB_NAME, 1);
 
-albumForm.addEventListener("submit", (event) => {
-  event.preventDefault();
+    request.onupgradeneeded = () => {
+      request.result.createObjectStore(PHOTO_STORE_NAME, {
+        keyPath: "id",
+        autoIncrement: true
+      });
+    };
 
-  const albumName = albumNameInput.value.trim();
-  const albumUrl = normalizeAlbumUrl(albumUrlInput.value);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
 
-  if (!albumName || !albumUrl) {
-    showNotice("Ajoutez un nom et un lien pour l'album.");
+async function getStoredPhotos() {
+  const db = await openPhotoDb();
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(PHOTO_STORE_NAME, "readonly");
+    const store = transaction.objectStore(PHOTO_STORE_NAME);
+    const request = store.getAll();
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+    transaction.oncomplete = () => db.close();
+  });
+}
+
+async function addStoredPhoto(file) {
+  const db = await openPhotoDb();
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(PHOTO_STORE_NAME, "readwrite");
+    const store = transaction.objectStore(PHOTO_STORE_NAME);
+    const request = store.add({
+      name: file.name,
+      type: file.type,
+      blob: file,
+      createdAt: Date.now()
+    });
+
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+    transaction.oncomplete = () => db.close();
+  });
+}
+
+async function renderStoredPhotos() {
+  photoGallery.innerHTML = "";
+  const photos = await getStoredPhotos();
+
+  if (photos.length === 0) {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.className = "empty-message";
+    emptyMessage.textContent = "Aucune image ajoutée pour le moment.";
+    photoGallery.append(emptyMessage);
     return;
   }
 
-  photoAlbums.push({ name: albumName, href: albumUrl });
-  savePhotoAlbums();
-  renderPhotoAlbums();
-  albumForm.reset();
+  photos
+    .sort((a, b) => b.createdAt - a.createdAt)
+    .forEach((photo) => {
+      const image = document.createElement("img");
+      image.className = "local-photo";
+      image.src = URL.createObjectURL(photo.blob);
+      image.alt = photo.name || "Photo ajoutée";
+      image.addEventListener("load", () => URL.revokeObjectURL(image.src), { once: true });
+      photoGallery.append(image);
+    });
+}
+
+teamsButton.addEventListener("click", () => teamsDialog.showModal());
+closeTeamsButton.addEventListener("click", () => teamsDialog.close());
+closeNoticeButton.addEventListener("click", () => noticeDialog.close());
+photosButton.addEventListener("click", () => {
+  renderStoredPhotos();
+  photosDialog.showModal();
+});
+closePhotosButton.addEventListener("click", () => photosDialog.close());
+
+photoInput.addEventListener("change", async () => {
+  const imageFiles = [...photoInput.files].filter((file) => file.type.startsWith("image/"));
+
+  if (imageFiles.length === 0) {
+    return;
+  }
+
+  try {
+    await Promise.all(imageFiles.map((file) => addStoredPhoto(file)));
+    await renderStoredPhotos();
+    photoInput.value = "";
+  } catch {
+    showNotice("Impossible d'ajouter ces images. Essayez avec moins de photos à la fois.");
+  }
 });
 
 document.querySelectorAll("[data-action]").forEach((button) => {
@@ -159,7 +177,7 @@ document.querySelectorAll("[data-action]").forEach((button) => {
     const action = button.dataset.action;
 
     if (action === "emergency") {
-      window.location.href = "intent://#Intent;package=com.teamviewer.quicksupport;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.teamviewer.quicksupport;end";
+      window.location.href = "intent://launch/#Intent;package=com.teamviewer.quicksupport;S.browser_fallback_url=market%3A%2F%2Fdetails%3Fid%3Dcom.teamviewer.quicksupport;end";
       return;
     }
   });
