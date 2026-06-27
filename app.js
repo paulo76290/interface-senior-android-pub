@@ -10,7 +10,11 @@ const closeNoticeButton = document.querySelector("#closeNoticeButton");
 const photosButton = document.querySelector("#photosButton");
 const photosDialog = document.querySelector("#photosDialog");
 const albumList = document.querySelector("#albumList");
+const albumForm = document.querySelector("#albumForm");
+const albumNameInput = document.querySelector("#albumNameInput");
+const albumUrlInput = document.querySelector("#albumUrlInput");
 const closePhotosButton = document.querySelector("#closePhotosButton");
+const ALBUM_STORAGE_KEY = "tablette-simple-photo-albums";
 
 const contacts = [
   { name: "Marie", action: "Appel Teams", href: "https://teams.microsoft.com" },
@@ -18,13 +22,7 @@ const contacts = [
   { name: "Sophie", action: "Appel Teams", href: "https://teams.microsoft.com" }
 ];
 
-const photoAlbums = [
-  { year: "2020", href: "https://www.amazon.fr/photos/share/olMdIX9ks8pmSfOiy4efnDLLzNbLLECLVcTreKqHnjs" },
-  { year: "2021", href: "https://www.amazon.fr/photos/share/nWsr5nRzMEOIi1NZYCvx7NeE31eNfwk8CZsa5iIaWfP" },
-  { year: "2022", href: "https://www.amazon.fr/photos/share/U7Bo6oxjYJcUTdRajjXHuDrBDaPutWi46tBg4AT7MpS" },
-  { year: "2023", href: "https://www.amazon.fr/photos/share/mmHjA0ZBis6Yab57Vv2ptYbEXxjbHRjlOM5zIVMwqvZ" },
-  { year: "2024", href: "https://www.amazon.fr/photos/share/ljvld6RPbzFJ3nHVHaTUDYwKYCMzR8qGDgWH4hCUZly" }
-];
+let photoAlbums = loadPhotoAlbums();
 
 const dateFormatter = new Intl.DateTimeFormat("fr-BE", {
   weekday: "long",
@@ -62,16 +60,59 @@ contactsEl.innerHTML = contacts
   })
   .join("");
 
-albumList.innerHTML = photoAlbums
-  .map((album) => {
-    return `
-      <a class="album-link" href="${album.href}" target="_blank" rel="noopener">
-        <span class="album-year">Mathilda ${album.year}</span>
-        <span class="album-name">Album photos</span>
-      </a>
-    `;
-  })
-  .join("");
+function loadPhotoAlbums() {
+  try {
+    return JSON.parse(localStorage.getItem(ALBUM_STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function savePhotoAlbums() {
+  localStorage.setItem(ALBUM_STORAGE_KEY, JSON.stringify(photoAlbums));
+}
+
+function normalizeAlbumUrl(url) {
+  const trimmedUrl = url.trim();
+  if (/^https?:\/\//i.test(trimmedUrl)) {
+    return trimmedUrl;
+  }
+
+  return `https://${trimmedUrl}`;
+}
+
+function renderPhotoAlbums() {
+  albumList.innerHTML = "";
+
+  if (photoAlbums.length === 0) {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.className = "empty-message";
+    emptyMessage.textContent = "Aucun album ajouté pour le moment.";
+    albumList.append(emptyMessage);
+    return;
+  }
+
+  photoAlbums.forEach((album) => {
+    const albumLink = document.createElement("a");
+    albumLink.className = "album-link";
+    albumLink.href = album.href;
+    albumLink.target = "_blank";
+    albumLink.rel = "noopener";
+
+    const albumTitle = document.createElement("span");
+    albumTitle.className = "album-year";
+    albumTitle.textContent = album.name;
+
+    const albumSubtitle = document.createElement("span");
+    albumSubtitle.className = "album-name";
+    albumSubtitle.textContent = "Album photos";
+
+    albumLink.append(albumTitle, albumSubtitle);
+    albumList.append(albumLink);
+  });
+}
+
+renderPhotoAlbums();
 
 function showNotice(message) {
   noticeText.textContent = message;
@@ -83,6 +124,23 @@ closeTeamsButton.addEventListener("click", () => teamsDialog.close());
 closeNoticeButton.addEventListener("click", () => noticeDialog.close());
 photosButton.addEventListener("click", () => photosDialog.showModal());
 closePhotosButton.addEventListener("click", () => photosDialog.close());
+
+albumForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const albumName = albumNameInput.value.trim();
+  const albumUrl = normalizeAlbumUrl(albumUrlInput.value);
+
+  if (!albumName || !albumUrl) {
+    showNotice("Ajoutez un nom et un lien pour l'album.");
+    return;
+  }
+
+  photoAlbums.push({ name: albumName, href: albumUrl });
+  savePhotoAlbums();
+  renderPhotoAlbums();
+  albumForm.reset();
+});
 
 document.querySelectorAll("[data-action]").forEach((button) => {
   button.addEventListener("click", () => {

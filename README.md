@@ -31,7 +31,7 @@ Le bouton Teams ouvre les contacts favoris Teams. Le bouton "Ouvrir Teams" utili
 
 Le bouton WhatsApp utilise un lien Android qui tente d'ouvrir l'application WhatsApp. Si elle n'est pas installée, Chrome redirige vers le site WhatsApp.
 
-Le bouton Photos ouvre une liste d'albums Amazon Photos nommés Mathilda 2020 à Mathilda 2024.
+Le bouton Photos ouvre une liste d'albums personnalisable. Les albums peuvent être ajoutés depuis l'interface avec un nom et un lien; ils sont conservés dans le navigateur de la tablette.
 
 Le bouton Mail Orange ouvre `https://mail.orange.fr`.
 
