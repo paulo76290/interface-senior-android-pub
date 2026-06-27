@@ -1,6 +1,6 @@
 # Interface tablette simple
 
-Interface web pour tablette Android, pensée pour des personnes âgées: grande date et heure, gros boutons, accès direct à Teams, WhatsApp, Photos et bouton d'urgence vers TeamViewer.
+Interface web pour tablette Android, pensée pour des personnes âgées: grande date et heure, gros boutons, accès direct à Teams, WhatsApp, Photos, Mail Orange, Play Store et bouton d'urgence vers TeamViewer.
 
 ## Utilisation rapide
 

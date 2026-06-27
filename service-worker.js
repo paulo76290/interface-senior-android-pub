@@ -1,4 +1,4 @@
-const CACHE_NAME = "tablette-simple-v3";
+const CACHE_NAME = "tablette-simple-v4";
 const ASSETS = [
   "./",
   "./index.html",

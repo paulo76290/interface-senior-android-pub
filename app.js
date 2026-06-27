@@ -162,13 +162,6 @@ document.querySelectorAll("[data-action]").forEach((button) => {
       window.location.href = "intent://open/#Intent;scheme=teamviewer;package=com.teamviewer.quicksupport;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.teamviewer.quicksupport;end";
       return;
     }
-
-    if (action === "volume") {
-      showNotice("Utilisez les boutons physiques de la tablette pour augmenter le son.");
-      return;
-    }
-
-    showNotice("Glissez depuis le haut de l'écran pour régler la luminosité.");
   });
 });
 
