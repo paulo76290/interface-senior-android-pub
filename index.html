@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f7f4ee">
+    <title>Tablette simple</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="tablet-shell" aria-label="Interface simplifiée pour tablette">
+      <section class="top-band" aria-label="Date et heure">
+        <div class="clock-panel">
+          <p class="time-now" id="timeNow">--:--</p>
+          <p class="today" id="today">Bienvenue</p>
+        </div>
+      </section>
+
+      <section class="quick-actions" aria-label="Actions principales">
+        <button class="action-tile teams" id="teamsButton" type="button" data-app="teams">
+          <span class="tile-icon brand-icon">
+            <img src="teams-logo.svg" alt="" aria-hidden="true">
+          </span>
+          <span class="tile-title">Teams</span>
+          <span class="tile-subtitle">Voir la famille ou rejoindre une réunion</span>
+        </button>
+
+        <a class="action-tile whatsapp" href="intent://send/#Intent;scheme=whatsapp;package=com.whatsapp;S.browser_fallback_url=https%3A%2F%2Fwa.me%2F;end" data-app="whatsapp">
+          <span class="tile-icon brand-icon">
+            <img src="whatsapp-logo.svg" alt="" aria-hidden="true">
+          </span>
+          <span class="tile-title">WhatsApp</span>
+          <span class="tile-subtitle">Lire ou envoyer un message</span>
+        </a>
+
+        <button class="action-tile photos" id="photosButton" type="button" data-app="photos">
+          <span class="tile-icon">▣</span>
+          <span class="tile-title">Photos</span>
+          <span class="tile-subtitle">Regarder les souvenirs</span>
+        </button>
+
+        <a class="action-tile orange-mail" href="https://mail.orange.fr" target="_blank" rel="noopener" data-app="orange-mail">
+          <span class="tile-icon">✉</span>
+          <span class="tile-title">Mail Orange</span>
+          <span class="tile-subtitle">Lire la boîte mail</span>
+        </a>
+      </section>
+
+      <section class="lower-band" aria-label="Outils utiles">
+        <button class="utility" type="button" data-action="volume">
+          <span class="utility-icon">◖</span>
+          Son plus fort
+        </button>
+        <button class="utility" type="button" data-action="brightness">
+          <span class="utility-icon">☼</span>
+          Luminosité
+        </button>
+        <a class="utility play-store" href="https://play.google.com/store/apps" target="_blank" rel="noopener">
+          <span class="utility-icon play-store-icon">
+            <img src="play-store-logo.svg" alt="" aria-hidden="true">
+          </span>
+          Play Store
+        </a>
+        <button class="utility danger" type="button" data-action="emergency">
+          <span class="utility-icon">!</span>
+          Urgence
+        </button>
+      </section>
+    </main>
+
+    <dialog class="dialog" id="noticeDialog" aria-labelledby="noticeTitle">
+      <h2 id="noticeTitle">Information</h2>
+      <p id="noticeText"></p>
+      <button class="primary-button" id="closeNoticeButton" type="button">OK</button>
+    </dialog>
+
+    <dialog class="dialog wide-dialog" id="photosDialog" aria-labelledby="photosTitle">
+      <h2 id="photosTitle">Photos Mathilda</h2>
+      <div class="album-list" id="albumList"></div>
+      <button class="primary-button" id="closePhotosButton" type="button">Retour</button>
+    </dialog>
+
+    <dialog class="dialog wide-dialog" id="teamsDialog" aria-labelledby="teamsTitle">
+      <h2 id="teamsTitle">Contacts Teams</h2>
+      <div class="contacts" id="contacts"></div>
+      <a class="primary-link" href="https://teams.microsoft.com">Ouvrir Teams</a>
+      <button class="primary-button" id="closeTeamsButton" type="button">Retour</button>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
