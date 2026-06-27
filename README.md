@@ -12,22 +12,9 @@ Pour une installation plus propre sur Android:
 2. Ouvrir l'adresse dans Chrome sur la tablette.
 3. Menu Chrome > Ajouter à l'écran d'accueil.
 
-## Personnaliser les contacts Teams
-
-Les contacts apparaissent quand on appuie sur le bouton Teams. Modifier la liste `contacts` dans `app.js`.
-
-Exemple:
-
-```js
-const contacts = [
-  { name: "Marie", action: "Appel Teams", href: "https://teams.microsoft.com" },
-  { name: "Paul", action: "Email", href: "mailto:paul@example.com" }
-];
-```
-
 ## Applications
 
-Le bouton Teams tente d'ouvrir directement l'application Microsoft Teams. Si elle n'est pas installée, Android redirige vers le Play Store.
+Le bouton Teams tente de lancer directement l'application Android Microsoft Teams avec le paquet `com.microsoft.teams`. Si elle n'est pas installée, Android redirige vers le Play Store.
 
 Le bouton WhatsApp tente d'ouvrir l'application WhatsApp. Si elle n'est pas installée, Android redirige vers le Play Store.
 
