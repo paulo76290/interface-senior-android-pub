@@ -17,9 +17,21 @@ const closePhotosButton = document.querySelector("#closePhotosButton");
 const ALBUM_STORAGE_KEY = "tablette-simple-photo-albums";
 
 const contacts = [
-  { name: "Marie", action: "Appel Teams", href: "https://teams.microsoft.com" },
-  { name: "Paul", action: "Appel Teams", href: "https://teams.microsoft.com" },
-  { name: "Sophie", action: "Appel Teams", href: "https://teams.microsoft.com" }
+  {
+    name: "Marie",
+    action: "Appel Teams",
+    href: "intent://teams.microsoft.com/#Intent;scheme=https;package=com.microsoft.teams;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.microsoft.teams;end"
+  },
+  {
+    name: "Paul",
+    action: "Appel Teams",
+    href: "intent://teams.microsoft.com/#Intent;scheme=https;package=com.microsoft.teams;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.microsoft.teams;end"
+  },
+  {
+    name: "Sophie",
+    action: "Appel Teams",
+    href: "intent://teams.microsoft.com/#Intent;scheme=https;package=com.microsoft.teams;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.microsoft.teams;end"
+  }
 ];
 
 let photoAlbums = loadPhotoAlbums();
@@ -147,7 +159,7 @@ document.querySelectorAll("[data-action]").forEach((button) => {
     const action = button.dataset.action;
 
     if (action === "emergency") {
-      window.location.href = "intent://open/#Intent;scheme=teamviewer;package=com.teamviewer.quicksupport;S.browser_fallback_url=https%3A%2F%2Fwww.teamviewer.com%2Ffr%2Fdownload%2Fandroid%2F;end";
+      window.location.href = "intent://open/#Intent;scheme=teamviewer;package=com.teamviewer.quicksupport;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.teamviewer.quicksupport;end";
       return;
     }
 

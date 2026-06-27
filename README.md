@@ -27,14 +27,14 @@ const contacts = [
 
 ## Applications
 
-Le bouton Teams ouvre les contacts favoris Teams. Le bouton "Ouvrir Teams" utilise `https://teams.microsoft.com`. Sur Android, si Microsoft Teams est installé et associé aux liens Teams, la tablette proposera généralement d'ouvrir l'application. Sinon, le site Teams s'ouvre dans le navigateur.
+Le bouton Teams ouvre les contacts favoris Teams. Le bouton "Ouvrir Teams" tente d'ouvrir l'application Microsoft Teams. Si elle n'est pas installée, Android redirige vers le Play Store.
 
-Le bouton WhatsApp utilise un lien Android qui tente d'ouvrir l'application WhatsApp. Si elle n'est pas installée, Chrome redirige vers le site WhatsApp.
+Le bouton WhatsApp tente d'ouvrir l'application WhatsApp. Si elle n'est pas installée, Android redirige vers le Play Store.
 
 Le bouton Photos ouvre une liste d'albums personnalisable. Les albums peuvent être ajoutés depuis l'interface avec un nom et un lien; ils sont conservés dans le navigateur de la tablette.
 
-Le bouton Mail Orange ouvre `https://mail.orange.fr`.
+Le bouton Mail Orange tente d'ouvrir l'application associée à `mail.orange.fr`. Si aucune application ne prend ce lien, Chrome ouvre le webmail Orange.
 
-Le bouton Play Store ouvre `https://play.google.com/store/apps`.
+Le bouton Play Store tente d'ouvrir directement l'application Google Play Store.
 
-Le bouton Urgence tente d'ouvrir TeamViewer QuickSupport. Si l'application n'est pas installée, Chrome redirige vers la page de téléchargement Android de TeamViewer.
+Le bouton Urgence tente d'ouvrir TeamViewer QuickSupport. Si l'application n'est pas installée, Android redirige vers le Play Store.
