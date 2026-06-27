@@ -1,27 +1,28 @@
-# Interface tablette simple
+# Interface senior PC
 
-Interface web pour tablette Android, pensée pour des personnes âgées: grande date et heure, gros boutons, accès direct à Teams, WhatsApp, Photos, Mail Orange, Play Store et bouton d'urgence vers TeamViewer.
+Interface web simplifiée pour PC, pensée pour ouvrir rapidement les logiciels utiles avec de gros boutons lisibles.
 
 ## Utilisation rapide
 
-Ouvrir `index.html` dans Chrome sur la tablette ou sur un ordinateur.
+Ouvrir `index.html` dans un navigateur sur le PC, ou utiliser la version publiée sur GitHub Pages.
 
-Pour une installation plus propre sur Android:
+Pour créer un raccourci sur le bureau Windows:
 
-1. Mettre le dossier sur un petit serveur web local ou l'héberger sur un site interne.
-2. Ouvrir l'adresse dans Chrome sur la tablette.
-3. Menu Chrome > Ajouter à l'écran d'accueil.
+1. Ouvrir la page dans Chrome ou Edge.
+2. Menu du navigateur > Plus d'outils / Applications.
+3. Choisir "Créer un raccourci" ou "Installer cette page comme application".
+4. Cocher l'option pour l'ajouter au bureau si elle est proposée.
 
 ## Applications
 
-Le bouton Teams tente de lancer directement l'application Android Microsoft Teams avec le paquet `com.microsoft.teams`. Si elle n'est pas installée, Android redirige vers le Play Store.
+Le bouton Teams utilise `msteams://`. Il ouvre Microsoft Teams si Teams est installé et si le protocole est enregistré sur Windows.
 
-Le bouton WhatsApp tente d'ouvrir l'application WhatsApp. Si elle n'est pas installée, Android redirige vers le Play Store.
+Le bouton WhatsApp utilise `whatsapp://`. Il ouvre WhatsApp Desktop si l'application est installée et si le protocole est enregistré.
 
-Le bouton Photos ouvre une galerie locale. Les images peuvent être ajoutées depuis le sélecteur de photos de la tablette; elles sont conservées localement dans le navigateur. Des albums en ligne peuvent aussi être ajoutés avec un nom et un lien.
+Le bouton Photos ouvre une galerie locale. Les images peuvent être ajoutées depuis le sélecteur de fichiers du PC; elles sont conservées localement dans le navigateur. Des albums en ligne peuvent aussi être ajoutés avec un nom et un lien.
 
-Le bouton Mail Orange tente d'ouvrir l'application associée à `mail.orange.fr`. Si aucune application ne prend ce lien, Chrome ouvre le webmail Orange.
+Le bouton Mail Orange ouvre `https://mail.orange.fr`.
 
-Le bouton Play Store tente d'ouvrir directement l'application Google Play Store.
+Le bouton TeamViewer utilise `teamviewer10://`. Il ouvre TeamViewer si le protocole est enregistré sur le PC.
 
-Le bouton Urgence tente de lancer directement l'application TeamViewer QuickSupport. Si l'application n'est pas installée, Android redirige vers le Play Store.
+Important: un navigateur ne peut pas lancer directement n'importe quel fichier `.exe` pour des raisons de sécurité. Il peut seulement ouvrir des logiciels qui déclarent un protocole comme `msteams://`, `whatsapp://` ou `teamviewer10://`.

@@ -212,7 +212,7 @@ document.querySelectorAll("[data-action]").forEach((button) => {
     const action = button.dataset.action;
 
     if (action === "emergency") {
-      window.location.href = "intent://launch/#Intent;package=com.teamviewer.quicksupport;S.browser_fallback_url=market%3A%2F%2Fdetails%3Fid%3Dcom.teamviewer.quicksupport;end";
+      window.location.href = "teamviewer10://";
       return;
     }
   });

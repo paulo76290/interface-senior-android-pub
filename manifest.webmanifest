@@ -1,6 +1,6 @@
 {
-  "name": "Tablette simple",
-  "short_name": "Simple",
+  "name": "Interface senior PC",
+  "short_name": "Senior PC",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f7f4ee",
@@ -20,12 +20,6 @@
     },
     {
       "src": "whatsapp-logo.svg",
-      "sizes": "96x96",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "play-store-logo.svg",
       "sizes": "96x96",
       "type": "image/svg+xml",
       "purpose": "any"

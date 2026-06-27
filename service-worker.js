@@ -1,4 +1,4 @@
-const CACHE_NAME = "tablette-simple-v8";
+const CACHE_NAME = "interface-senior-pc-v1";
 const ASSETS = [
   "./",
   "./index.html",
@@ -7,8 +7,7 @@ const ASSETS = [
   "./manifest.webmanifest",
   "./icon.svg",
   "./teams-logo.svg",
-  "./whatsapp-logo.svg",
-  "./play-store-logo.svg"
+  "./whatsapp-logo.svg"
 ];
 
 self.addEventListener("install", (event) => {
