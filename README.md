@@ -27,11 +27,11 @@ const contacts = [
 
 ## Applications
 
-Le bouton Teams ouvre les contacts favoris Teams. Le bouton "Ouvrir Teams" tente d'ouvrir l'application Microsoft Teams. Si elle n'est pas installée, Android redirige vers le Play Store.
+Le bouton Teams tente d'ouvrir directement l'application Microsoft Teams. Si elle n'est pas installée, Android redirige vers le Play Store.
 
 Le bouton WhatsApp tente d'ouvrir l'application WhatsApp. Si elle n'est pas installée, Android redirige vers le Play Store.
 
-Le bouton Photos ouvre une galerie locale. Les images peuvent être ajoutées depuis le sélecteur de photos de la tablette; elles sont conservées localement dans le navigateur de la tablette.
+Le bouton Photos ouvre une galerie locale. Les images peuvent être ajoutées depuis le sélecteur de photos de la tablette; elles sont conservées localement dans le navigateur. Des albums en ligne peuvent aussi être ajoutés avec un nom et un lien.
 
 Le bouton Mail Orange tente d'ouvrir l'application associée à `mail.orange.fr`. Si aucune application ne prend ce lien, Chrome ouvre le webmail Orange.
 

@@ -1,9 +1,5 @@
 const timeNowEl = document.querySelector("#timeNow");
 const todayEl = document.querySelector("#today");
-const contactsEl = document.querySelector("#contacts");
-const teamsButton = document.querySelector("#teamsButton");
-const teamsDialog = document.querySelector("#teamsDialog");
-const closeTeamsButton = document.querySelector("#closeTeamsButton");
 const noticeDialog = document.querySelector("#noticeDialog");
 const noticeText = document.querySelector("#noticeText");
 const closeNoticeButton = document.querySelector("#closeNoticeButton");
@@ -11,27 +7,15 @@ const photosButton = document.querySelector("#photosButton");
 const photosDialog = document.querySelector("#photosDialog");
 const photoGallery = document.querySelector("#photoGallery");
 const photoInput = document.querySelector("#photoInput");
+const onlineAlbumList = document.querySelector("#onlineAlbumList");
+const onlineAlbumForm = document.querySelector("#onlineAlbumForm");
+const onlineAlbumNameInput = document.querySelector("#onlineAlbumNameInput");
+const onlineAlbumUrlInput = document.querySelector("#onlineAlbumUrlInput");
 const closePhotosButton = document.querySelector("#closePhotosButton");
+
 const PHOTO_DB_NAME = "tablette-simple-photos";
 const PHOTO_STORE_NAME = "photos";
-
-const contacts = [
-  {
-    name: "Marie",
-    action: "Appel Teams",
-    href: "intent://teams.microsoft.com/#Intent;scheme=https;package=com.microsoft.teams;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.microsoft.teams;end"
-  },
-  {
-    name: "Paul",
-    action: "Appel Teams",
-    href: "intent://teams.microsoft.com/#Intent;scheme=https;package=com.microsoft.teams;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.microsoft.teams;end"
-  },
-  {
-    name: "Sophie",
-    action: "Appel Teams",
-    href: "intent://teams.microsoft.com/#Intent;scheme=https;package=com.microsoft.teams;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.microsoft.teams;end"
-  }
-];
+const ONLINE_ALBUM_STORAGE_KEY = "tablette-simple-online-albums";
 
 const dateFormatter = new Intl.DateTimeFormat("fr-BE", {
   weekday: "long",
@@ -45,6 +29,8 @@ const timeFormatter = new Intl.DateTimeFormat("fr-BE", {
   minute: "2-digit"
 });
 
+let onlineAlbums = loadOnlineAlbums();
+
 function updateClock() {
   const now = new Date();
   timeNowEl.textContent = timeFormatter.format(now);
@@ -53,21 +39,6 @@ function updateClock() {
 
 updateClock();
 setInterval(updateClock, 30000);
-
-contactsEl.innerHTML = contacts
-  .map((contact) => {
-    const initial = contact.name.slice(0, 1).toUpperCase();
-    return `
-      <a class="contact" href="${contact.href}" aria-label="${contact.action} avec ${contact.name}">
-        <span class="contact-avatar" aria-hidden="true">${initial}</span>
-        <span>
-          <span class="contact-name">${contact.name}</span>
-          <span class="contact-action">${contact.action}</span>
-        </span>
-      </a>
-    `;
-  })
-  .join("");
 
 function showNotice(message) {
   noticeText.textContent = message;
@@ -147,11 +118,58 @@ async function renderStoredPhotos() {
     });
 }
 
-teamsButton.addEventListener("click", () => teamsDialog.showModal());
-closeTeamsButton.addEventListener("click", () => teamsDialog.close());
+function loadOnlineAlbums() {
+  try {
+    return JSON.parse(localStorage.getItem(ONLINE_ALBUM_STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveOnlineAlbums() {
+  localStorage.setItem(ONLINE_ALBUM_STORAGE_KEY, JSON.stringify(onlineAlbums));
+}
+
+function normalizeUrl(url) {
+  const trimmedUrl = url.trim();
+  if (/^https?:\/\//i.test(trimmedUrl)) {
+    return trimmedUrl;
+  }
+
+  return `https://${trimmedUrl}`;
+}
+
+function renderOnlineAlbums() {
+  onlineAlbumList.innerHTML = "";
+
+  if (onlineAlbums.length === 0) {
+    return;
+  }
+
+  onlineAlbums.forEach((album) => {
+    const albumLink = document.createElement("a");
+    albumLink.className = "album-link";
+    albumLink.href = album.href;
+    albumLink.target = "_blank";
+    albumLink.rel = "noopener";
+
+    const albumTitle = document.createElement("span");
+    albumTitle.className = "album-title";
+    albumTitle.textContent = album.name;
+
+    const albumSubtitle = document.createElement("span");
+    albumSubtitle.className = "album-name";
+    albumSubtitle.textContent = "Album en ligne";
+
+    albumLink.append(albumTitle, albumSubtitle);
+    onlineAlbumList.append(albumLink);
+  });
+}
+
 closeNoticeButton.addEventListener("click", () => noticeDialog.close());
 photosButton.addEventListener("click", () => {
   renderStoredPhotos();
+  renderOnlineAlbums();
   photosDialog.showModal();
 });
 closePhotosButton.addEventListener("click", () => photosDialog.close());
@@ -170,6 +188,23 @@ photoInput.addEventListener("change", async () => {
   } catch {
     showNotice("Impossible d'ajouter ces images. Essayez avec moins de photos à la fois.");
   }
+});
+
+onlineAlbumForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const albumName = onlineAlbumNameInput.value.trim();
+  const albumUrl = normalizeUrl(onlineAlbumUrlInput.value);
+
+  if (!albumName || !albumUrl) {
+    showNotice("Ajoutez un nom et un lien pour l'album.");
+    return;
+  }
+
+  onlineAlbums.push({ name: albumName, href: albumUrl });
+  saveOnlineAlbums();
+  renderOnlineAlbums();
+  onlineAlbumForm.reset();
 });
 
 document.querySelectorAll("[data-action]").forEach((button) => {

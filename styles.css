@@ -75,18 +75,25 @@ a {
   text-align: center;
 }
 
-.time-now {
+.date-time-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 18px;
   margin: 0;
+  flex-wrap: wrap;
+}
+
+.time-now {
   color: var(--ink);
-  font-size: clamp(3.8rem, 10vw, 8.8rem);
+  font-size: clamp(2rem, 5vw, 4rem);
   font-weight: 900;
-  line-height: 0.94;
+  line-height: 1;
 }
 
 .today {
-  margin: 8px 0 0;
   color: var(--muted);
-  font-size: clamp(1.55rem, 3.5vw, 3rem);
+  font-size: clamp(1.15rem, 2.5vw, 2rem);
   font-weight: 900;
   text-transform: capitalize;
 }
@@ -343,6 +350,13 @@ button:hover {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.online-albums {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .local-photo {
   width: 100%;
   aspect-ratio: 4 / 3;
@@ -364,7 +378,30 @@ button:hover {
   text-align: center;
 }
 
-.file-button {
+.album-link {
+  display: grid;
+  min-height: 86px;
+  align-content: center;
+  gap: 4px;
+  padding: 16px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: #fff7e4;
+}
+
+.album-title {
+  font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+  font-weight: 900;
+}
+
+.album-name {
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.file-button,
+.secondary-button {
   display: grid;
   min-height: 58px;
   margin-top: 18px;
@@ -378,6 +415,38 @@ button:hover {
   font-size: 1.08rem;
   font-weight: 900;
   box-shadow: 0 8px 0 rgba(32, 33, 36, 0.16);
+}
+
+.album-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 2px solid var(--line);
+}
+
+.album-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.album-form input {
+  width: 100%;
+  min-height: 54px;
+  padding: 10px 12px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.secondary-button {
+  margin-top: 0;
 }
 
 .file-button input {
@@ -405,7 +474,8 @@ button:hover {
   .quick-actions,
   .contacts,
   .lower-band,
-  .photo-gallery {
+  .photo-gallery,
+  .online-albums {
     grid-template-columns: 1fr;
   }
 

@@ -12,19 +12,21 @@
     <main class="tablet-shell" aria-label="Interface simplifiée pour tablette">
       <section class="top-band" aria-label="Date et heure">
         <div class="clock-panel">
-          <p class="time-now" id="timeNow">--:--</p>
-          <p class="today" id="today">Bienvenue</p>
+          <p class="date-time-line">
+            <span class="time-now" id="timeNow">--:--</span>
+            <span class="today" id="today">Bienvenue</span>
+          </p>
         </div>
       </section>
 
       <section class="quick-actions" aria-label="Actions principales">
-        <button class="action-tile teams" id="teamsButton" type="button" data-app="teams">
+        <a class="action-tile teams" href="intent://teams.microsoft.com/#Intent;scheme=https;package=com.microsoft.teams;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.microsoft.teams;end" data-app="teams">
           <span class="tile-icon brand-icon">
             <img src="teams-logo.svg" alt="" aria-hidden="true">
           </span>
           <span class="tile-title">Teams</span>
           <span class="tile-subtitle">Voir la famille ou rejoindre une réunion</span>
-        </button>
+        </a>
 
         <a class="action-tile whatsapp" href="intent://send/#Intent;scheme=whatsapp;package=com.whatsapp;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.whatsapp;end" data-app="whatsapp">
           <span class="tile-icon brand-icon">
@@ -74,14 +76,19 @@
         Ajouter des images
         <input id="photoInput" type="file" accept="image/*" multiple>
       </label>
+      <div class="online-albums" id="onlineAlbumList"></div>
+      <form class="album-form" id="onlineAlbumForm">
+        <label>
+          Nom de l'album
+          <input id="onlineAlbumNameInput" name="albumName" type="text" placeholder="Vacances 2025" autocomplete="off" required>
+        </label>
+        <label>
+          Lien de l'album
+          <input id="onlineAlbumUrlInput" name="albumUrl" type="url" placeholder="https://..." autocomplete="off" required>
+        </label>
+        <button class="secondary-button" type="submit">Ajouter un album en ligne</button>
+      </form>
       <button class="primary-button" id="closePhotosButton" type="button">Retour</button>
-    </dialog>
-
-    <dialog class="dialog wide-dialog" id="teamsDialog" aria-labelledby="teamsTitle">
-      <h2 id="teamsTitle">Contacts Teams</h2>
-      <div class="contacts" id="contacts"></div>
-      <a class="primary-link" href="intent://teams.microsoft.com/#Intent;scheme=https;package=com.microsoft.teams;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.microsoft.teams;end">Ouvrir Teams</a>
-      <button class="primary-button" id="closeTeamsButton" type="button">Retour</button>
     </dialog>
 
     <script src="app.js"></script>
