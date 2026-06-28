@@ -3,6 +3,12 @@ const todayEl = document.querySelector("#today");
 const noticeDialog = document.querySelector("#noticeDialog");
 const noticeText = document.querySelector("#noticeText");
 const closeNoticeButton = document.querySelector("#closeNoticeButton");
+const teamsButton = document.querySelector("#teamsButton");
+const teamsDialog = document.querySelector("#teamsDialog");
+const teamContactList = document.querySelector("#teamContactList");
+const teamContactForm = document.querySelector("#teamContactForm");
+const teamEmailInput = document.querySelector("#teamEmailInput");
+const closeTeamsButton = document.querySelector("#closeTeamsButton");
 const photosButton = document.querySelector("#photosButton");
 const photosDialog = document.querySelector("#photosDialog");
 const photoGallery = document.querySelector("#photoGallery");
@@ -16,6 +22,7 @@ const closePhotosButton = document.querySelector("#closePhotosButton");
 const PHOTO_DB_NAME = "tablette-simple-photos";
 const PHOTO_STORE_NAME = "photos";
 const ONLINE_ALBUM_STORAGE_KEY = "tablette-simple-online-albums";
+const TEAM_CONTACT_STORAGE_KEY = "interface-senior-teams-contacts";
 
 const dateFormatter = new Intl.DateTimeFormat("fr-BE", {
   weekday: "long",
@@ -30,6 +37,7 @@ const timeFormatter = new Intl.DateTimeFormat("fr-BE", {
 });
 
 let onlineAlbums = loadOnlineAlbums();
+let teamContacts = loadTeamContacts();
 
 function updateClock() {
   const now = new Date();
@@ -43,6 +51,62 @@ setInterval(updateClock, 30000);
 function showNotice(message) {
   noticeText.textContent = message;
   noticeDialog.showModal();
+}
+
+function loadTeamContacts() {
+  try {
+    return JSON.parse(localStorage.getItem(TEAM_CONTACT_STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveTeamContacts() {
+  localStorage.setItem(TEAM_CONTACT_STORAGE_KEY, JSON.stringify(teamContacts));
+}
+
+function createTeamsChatUrl(email) {
+  return `https://teams.microsoft.com/l/chat/0/0?users=${email}`;
+}
+
+function createContactTitle(email) {
+  const localPart = email.split("@")[0] || email;
+  return localPart
+    .split(/[._-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function renderTeamContacts() {
+  teamContactList.innerHTML = "";
+
+  if (teamContacts.length === 0) {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.className = "empty-message";
+    emptyMessage.textContent = "Aucun contact Teams ajouté pour le moment.";
+    teamContactList.append(emptyMessage);
+    return;
+  }
+
+  teamContacts.forEach((contact) => {
+    const contactLink = document.createElement("a");
+    contactLink.className = "album-link";
+    contactLink.href = createTeamsChatUrl(contact.email);
+    contactLink.target = "_blank";
+    contactLink.rel = "noopener";
+
+    const contactName = document.createElement("span");
+    contactName.className = "album-title";
+    contactName.textContent = createContactTitle(contact.email);
+
+    const contactAction = document.createElement("span");
+    contactAction.className = "album-name";
+    contactAction.textContent = contact.email;
+
+    contactLink.append(contactName, contactAction);
+    teamContactList.append(contactLink);
+  });
 }
 
 function openPhotoDb() {
@@ -167,6 +231,31 @@ function renderOnlineAlbums() {
 }
 
 closeNoticeButton.addEventListener("click", () => noticeDialog.close());
+teamsButton.addEventListener("click", () => {
+  renderTeamContacts();
+  teamsDialog.showModal();
+});
+closeTeamsButton.addEventListener("click", () => teamsDialog.close());
+
+teamContactForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const email = teamEmailInput.value.trim().toLowerCase();
+
+  if (!email) {
+    showNotice("Ajoutez une adresse email Teams.");
+    return;
+  }
+
+  if (!teamContacts.some((contact) => contact.email === email)) {
+    teamContacts.push({ email });
+    saveTeamContacts();
+  }
+
+  renderTeamContacts();
+  teamContactForm.reset();
+});
+
 photosButton.addEventListener("click", () => {
   renderStoredPhotos();
   renderOnlineAlbums();

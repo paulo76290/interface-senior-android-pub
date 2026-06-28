@@ -20,13 +20,13 @@
       </section>
 
       <section class="quick-actions" aria-label="Actions principales">
-        <a class="action-tile teams" href="msteams://" data-app="teams">
+        <button class="action-tile teams" id="teamsButton" type="button" data-app="teams">
           <span class="tile-icon brand-icon">
             <img src="teams-logo.svg" alt="" aria-hidden="true">
           </span>
           <span class="tile-title">Teams</span>
-          <span class="tile-subtitle">Voir la famille ou rejoindre une réunion</span>
-        </a>
+          <span class="tile-subtitle">Choisir un contact</span>
+        </button>
 
         <a class="action-tile whatsapp" href="whatsapp://" data-app="whatsapp">
           <span class="tile-icon brand-icon">
@@ -61,6 +61,19 @@
       <h2 id="noticeTitle">Information</h2>
       <p id="noticeText"></p>
       <button class="primary-button" id="closeNoticeButton" type="button">OK</button>
+    </dialog>
+
+    <dialog class="dialog wide-dialog" id="teamsDialog" aria-labelledby="teamsTitle">
+      <h2 id="teamsTitle">Teams</h2>
+      <div class="team-list" id="teamContactList"></div>
+      <form class="album-form" id="teamContactForm">
+        <label>
+          Adresse email Teams
+          <input id="teamEmailInput" name="teamEmail" type="email" placeholder="prenom.nom@entreprise.com" autocomplete="email" required>
+        </label>
+        <button class="secondary-button" type="submit">Ajouter le contact</button>
+      </form>
+      <button class="primary-button" id="closeTeamsButton" type="button">Retour</button>
     </dialog>
 
     <dialog class="dialog wide-dialog" id="photosDialog" aria-labelledby="photosTitle">

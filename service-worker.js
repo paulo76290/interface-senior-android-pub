@@ -1,4 +1,4 @@
-const CACHE_NAME = "interface-senior-pc-v1";
+const CACHE_NAME = "interface-senior-pc-v2";
 const ASSETS = [
   "./",
   "./index.html",

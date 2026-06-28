@@ -357,6 +357,13 @@ button:hover {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.team-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .local-photo {
   width: 100%;
   aspect-ratio: 4 / 3;
@@ -475,7 +482,8 @@ button:hover {
   .contacts,
   .lower-band,
   .photo-gallery,
-  .online-albums {
+  .online-albums,
+  .team-list {
     grid-template-columns: 1fr;
   }
 
