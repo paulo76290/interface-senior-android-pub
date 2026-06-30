@@ -19,6 +19,7 @@ const photosDialog = document.querySelector("#photosDialog");
 const onlineAlbumList = document.querySelector("#onlineAlbumList");
 const onlineAlbumForm = document.querySelector("#onlineAlbumForm");
 const newLocalFolderButton = document.querySelector("#newLocalFolderButton");
+const newInternetAlbumButton = document.querySelector("#newInternetAlbumButton");
 const onlineAlbumEditIndexInput = document.querySelector("#onlineAlbumEditIndexInput");
 const onlineAlbumTypeInput = document.querySelector("#onlineAlbumTypeInput");
 const onlineAlbumNameInput = document.querySelector("#onlineAlbumNameInput");
@@ -36,19 +37,15 @@ const weatherForm = document.querySelector("#weatherForm");
 const weatherCityInput = document.querySelector("#weatherCityInput");
 const refreshWeatherButton = document.querySelector("#refreshWeatherButton");
 const closeWeatherButton = document.querySelector("#closeWeatherButton");
-const teamViewerSettingsButton = document.querySelector("#teamViewerSettingsButton");
-const teamViewerDialog = document.querySelector("#teamViewerDialog");
-const teamViewerForm = document.querySelector("#teamViewerForm");
-const teamViewerIdInput = document.querySelector("#teamViewerIdInput");
-const teamViewerIdSummary = document.querySelector("#teamViewerIdSummary");
-const closeTeamViewerButton = document.querySelector("#closeTeamViewerButton");
+const settingsButton = document.querySelector("#settingsButton");
+const settingsDialog = document.querySelector("#settingsDialog");
+const closeSettingsButton = document.querySelector("#closeSettingsButton");
 const exportSettingsButton = document.querySelector("#exportSettingsButton");
 const importSettingsInput = document.querySelector("#importSettingsInput");
 
 const ONLINE_ALBUM_STORAGE_KEY = "tablette-simple-online-albums";
 const TEAM_CONTACT_STORAGE_KEY = "interface-senior-teams-contacts";
 const WEATHER_CITY_STORAGE_KEY = "interface-senior-weather-city";
-const TEAMVIEWER_ID_STORAGE_KEY = "interface-senior-teamviewer-id";
 
 const dateFormatter = new Intl.DateTimeFormat("fr-BE", {
   weekday: "long",
@@ -65,7 +62,6 @@ const timeFormatter = new Intl.DateTimeFormat("fr-BE", {
 let onlineAlbums = loadOnlineAlbums();
 let teamContacts = loadTeamContacts();
 let weatherCity = localStorage.getItem(WEATHER_CITY_STORAGE_KEY) || "";
-let teamViewerId = localStorage.getItem(TEAMVIEWER_ID_STORAGE_KEY) || "";
 
 function updateClock() {
   const now = new Date();
@@ -81,23 +77,13 @@ function showNotice(message) {
   noticeDialog.showModal();
 }
 
-function updateTeamViewerSummary() {
-  teamViewerIdSummary.textContent = teamViewerId ? `ID TeamViewer : ${teamViewerId}` : "ID TeamViewer";
-}
-
-function saveTeamViewerId() {
-  localStorage.setItem(TEAMVIEWER_ID_STORAGE_KEY, teamViewerId);
-  updateTeamViewerSummary();
-}
-
 function collectSettings() {
   return {
     version: 1,
     exportedAt: new Date().toISOString(),
     teams: teamContacts,
     photoLinks: onlineAlbums,
-    weatherCity,
-    teamViewerId
+    weatherCity
   };
 }
 
@@ -121,12 +107,10 @@ function applyImportedSettings(settings) {
   teamContacts = Array.isArray(settings.teams) ? settings.teams : [];
   onlineAlbums = Array.isArray(settings.photoLinks) ? settings.photoLinks : [];
   weatherCity = typeof settings.weatherCity === "string" ? settings.weatherCity : "";
-  teamViewerId = typeof settings.teamViewerId === "string" ? settings.teamViewerId : "";
 
   saveTeamContacts();
   saveOnlineAlbums();
   localStorage.setItem(WEATHER_CITY_STORAGE_KEY, weatherCity);
-  saveTeamViewerId();
   loadWeather();
 }
 
@@ -192,9 +176,20 @@ function renderTeamContacts() {
     editButton.textContent = "modifier";
     editButton.addEventListener("click", () => startTeamEdit(index));
 
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "card-delete-button";
+    deleteButton.type = "button";
+    deleteButton.textContent = "×";
+    deleteButton.setAttribute("aria-label", `Supprimer ${contact.name || createContactTitle(contact.email)}`);
+    deleteButton.addEventListener("click", () => deleteTeamContact(index));
+
+    const cardActions = document.createElement("div");
+    cardActions.className = "card-actions";
+    cardActions.append(editButton);
+
     const reorderControls = createReorderControls(index, teamContacts.length, moveTeamContact);
 
-    contactCard.append(contactLink, editButton, reorderControls);
+    contactCard.append(contactLink, deleteButton, cardActions, reorderControls);
     teamContactList.append(contactCard);
   });
 }
@@ -239,6 +234,22 @@ function moveTeamContact(index, direction) {
     return;
   }
 
+  saveTeamContacts();
+  renderTeamContacts();
+}
+
+function deleteTeamContact(index) {
+  const contact = teamContacts[index];
+  if (!contact) {
+    return;
+  }
+
+  const contactName = contact.name || createContactTitle(contact.email);
+  if (!window.confirm(`Supprimer le contact ${contactName} ?`)) {
+    return;
+  }
+
+  teamContacts.splice(index, 1);
   saveTeamContacts();
   renderTeamContacts();
 }
@@ -321,7 +332,15 @@ function normalizePhotoShortcutHref(value, type) {
 }
 
 function getPhotoShortcutLabel(type) {
-  return type === "local-folder" ? "Dossier local" : "Page web";
+  return type === "local-folder" ? "Dossier local" : "Album internet";
+}
+
+function getPhotoShortcutPlaceholder(type) {
+  return type === "local-folder" ? "D:\\Images\\Photos" : "https://photos.google.com/...";
+}
+
+function getPhotoShortcutSubmitLabel(type) {
+  return type === "local-folder" ? "Ajouter le dossier" : "Ajouter l'album";
 }
 
 function getWeatherLabel(code) {
@@ -487,9 +506,20 @@ function renderOnlineAlbums() {
     editButton.textContent = "modifier";
     editButton.addEventListener("click", () => startOnlineAlbumEdit(index));
 
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "card-delete-button";
+    deleteButton.type = "button";
+    deleteButton.textContent = "×";
+    deleteButton.setAttribute("aria-label", `Supprimer ${album.name}`);
+    deleteButton.addEventListener("click", () => deleteOnlineAlbum(index));
+
+    const cardActions = document.createElement("div");
+    cardActions.className = "card-actions";
+    cardActions.append(editButton);
+
     const reorderControls = createReorderControls(index, onlineAlbums.length, moveOnlineAlbum);
 
-    albumCard.append(albumLink, editButton, reorderControls);
+    albumCard.append(albumLink, deleteButton, cardActions, reorderControls);
     onlineAlbumList.append(albumCard);
   });
 }
@@ -503,24 +533,41 @@ function moveOnlineAlbum(index, direction) {
   renderOnlineAlbums();
 }
 
+function deleteOnlineAlbum(index) {
+  const album = onlineAlbums[index];
+  if (!album) {
+    return;
+  }
+
+  if (!window.confirm(`Supprimer ${album.name} ?`)) {
+    return;
+  }
+
+  onlineAlbums.splice(index, 1);
+  saveOnlineAlbums();
+  renderOnlineAlbums();
+}
+
 function resetOnlineAlbumForm() {
   onlineAlbumEditIndexInput.value = "";
   onlineAlbumForm.reset();
   onlineAlbumTypeInput.value = "local-folder";
-  onlineAlbumUrlInput.placeholder = "D:\\Images\\Photos";
+  onlineAlbumUrlInput.placeholder = getPhotoShortcutPlaceholder("local-folder");
   onlineAlbumSubmitButton.textContent = "Ajouter";
   onlineAlbumForm.hidden = true;
   newLocalFolderButton.hidden = false;
+  newInternetAlbumButton.hidden = false;
 }
 
 function startOnlineAlbumCreate(type) {
   onlineAlbumEditIndexInput.value = "";
   onlineAlbumForm.reset();
   onlineAlbumTypeInput.value = type;
-  onlineAlbumUrlInput.placeholder = "D:\\Images\\Photos";
-  onlineAlbumSubmitButton.textContent = "Ajouter le dossier";
+  onlineAlbumUrlInput.placeholder = getPhotoShortcutPlaceholder(type);
+  onlineAlbumSubmitButton.textContent = getPhotoShortcutSubmitLabel(type);
   onlineAlbumForm.hidden = false;
   newLocalFolderButton.hidden = true;
+  newInternetAlbumButton.hidden = true;
   onlineAlbumNameInput.focus();
 }
 
@@ -534,10 +581,11 @@ function startOnlineAlbumEdit(index) {
   onlineAlbumTypeInput.value = album.type || "web-page";
   onlineAlbumNameInput.value = album.name;
   onlineAlbumUrlInput.value = album.href;
-  onlineAlbumUrlInput.placeholder = album.type === "local-folder" ? "D:\\Images\\Photos" : "https://exemple.fr";
+  onlineAlbumUrlInput.placeholder = getPhotoShortcutPlaceholder(album.type);
   onlineAlbumSubmitButton.textContent = "Enregistrer";
   onlineAlbumForm.hidden = false;
   newLocalFolderButton.hidden = true;
+  newInternetAlbumButton.hidden = true;
   onlineAlbumNameInput.focus();
 }
 
@@ -612,9 +660,9 @@ weatherForm.addEventListener("submit", (event) => {
 });
 
 loadWeather();
-updateTeamViewerSummary();
 
 newLocalFolderButton.addEventListener("click", () => startOnlineAlbumCreate("local-folder"));
+newInternetAlbumButton.addEventListener("click", () => startOnlineAlbumCreate("web-page"));
 cancelOnlineAlbumEditButton.addEventListener("click", resetOnlineAlbumForm);
 
 onlineAlbumForm.addEventListener("submit", (event) => {
@@ -644,19 +692,8 @@ onlineAlbumForm.addEventListener("submit", (event) => {
   resetOnlineAlbumForm();
 });
 
-teamViewerSettingsButton.addEventListener("click", () => {
-  teamViewerIdInput.value = teamViewerId;
-  teamViewerDialog.showModal();
-});
-
-closeTeamViewerButton.addEventListener("click", () => teamViewerDialog.close());
-
-teamViewerForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  teamViewerId = teamViewerIdInput.value.trim();
-  saveTeamViewerId();
-  teamViewerDialog.close();
-});
+settingsButton.addEventListener("click", () => settingsDialog.showModal());
+closeSettingsButton.addEventListener("click", () => settingsDialog.close());
 
 exportSettingsButton.addEventListener("click", downloadSettings);
 

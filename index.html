@@ -25,6 +25,7 @@
 
       <section class="quick-actions" aria-label="Actions principales">
         <button class="action-tile teams" id="teamsButton" type="button" data-app="teams">
+          <span class="help-badge" aria-label="Teams ouvre la liste des contacts et lance une conversation dans l'application Teams.">?</span>
           <span class="tile-icon brand-icon">
             <img src="teams-logo.svg" alt="" aria-hidden="true">
           </span>
@@ -33,6 +34,7 @@
         </button>
 
         <a class="action-tile whatsapp" href="whatsapp://" data-app="whatsapp">
+          <span class="help-badge" aria-label="WhatsApp ouvre directement l'application WhatsApp si elle est installee sur le PC.">?</span>
           <span class="tile-icon brand-icon">
             <img src="whatsapp-logo.svg" alt="" aria-hidden="true">
           </span>
@@ -41,6 +43,7 @@
         </a>
 
                 <button class="action-tile photos" id="photosButton" type="button" data-app="photos">
+          <span class="help-badge" aria-label="Photos permet d'ouvrir des dossiers locaux ou des albums photos internet.">?</span>
           <span class="tile-icon brand-icon">
             <img src="photos-logo.svg" alt="" aria-hidden="true">
           </span>
@@ -49,12 +52,16 @@
         </button>
 
         <a class="action-tile web-browser" href="https://www.google.fr" target="_blank" rel="noopener" data-app="web-browser">
-          <span class="tile-icon">⌕</span>
+          <span class="help-badge" aria-label="Internet ouvre une page web dans le navigateur.">?</span>
+          <span class="tile-icon brand-icon">
+            <img src="internet-logo.svg" alt="" aria-hidden="true">
+          </span>
           <span class="tile-title">Internet</span>
           <span class="tile-subtitle">Ouvrir une page web</span>
         </a>
 
         <a class="action-tile orange-mail" href="https://mail.orange.fr" target="_blank" rel="noopener" data-app="orange-mail">
+          <span class="help-badge" aria-label="Mail Orange ouvre la boite mail Orange dans une nouvelle fenetre.">?</span>
           <span class="tile-icon">✉</span>
           <span class="tile-title">Mail Orange</span>
           <span class="tile-subtitle">Lire la boite mail</span>
@@ -62,24 +69,17 @@
 
       </section>
 
-            <section class="lower-band" aria-label="Outils utiles">
+      <section class="lower-band" aria-label="Outils utiles">
         <button class="utility danger" type="button" data-action="emergency">
+          <span class="help-badge" aria-label="TeamViewer lance l'application d'assistance a distance TeamViewer QuickSupport.">?</span>
           <span class="utility-icon">!</span>
           TeamViewer
         </button>
-        <button class="utility" id="teamViewerSettingsButton" type="button">
-          <span class="utility-icon">ID</span>
-          <span id="teamViewerIdSummary">ID TeamViewer</span>
+        <button class="utility" id="settingsButton" type="button">
+          <span class="help-badge" aria-label="Reglages permet d'exporter ou d'importer la configuration de cette interface.">?</span>
+          <span class="utility-icon">⚙</span>
+          Reglages
         </button>
-        <button class="utility" id="exportSettingsButton" type="button">
-          <span class="utility-icon">↓</span>
-          Exporter reglages
-        </button>
-        <label class="utility import-settings">
-          <span class="utility-icon">↑</span>
-          Importer reglages
-          <input id="importSettingsInput" type="file" accept="application/json,.json">
-        </label>
       </section>
     </main>
 
@@ -122,6 +122,7 @@
         <h3>Liens photos</h3>
         <div class="inline-actions">
           <button class="secondary-button compact-button" id="newLocalFolderButton" type="button">Dossier local</button>
+          <button class="secondary-button compact-button" id="newInternetAlbumButton" type="button">Album internet</button>
         </div>
       </div>
       <div class="online-albums" id="onlineAlbumList"></div>
@@ -144,17 +145,18 @@
       <button class="primary-button" id="closePhotosButton" type="button">Retour</button>
     </dialog>
 
-    <dialog class="dialog" id="teamViewerDialog" aria-labelledby="teamViewerTitle">
-      <h2 id="teamViewerTitle">TeamViewer</h2>
-      <p>La page ne peut pas detecter automatiquement l'ID installe. Vous pouvez le noter ici pour l'afficher sur l'accueil.</p>
-      <form class="album-form" id="teamViewerForm">
-        <label>
-          ID TeamViewer
-          <input id="teamViewerIdInput" name="teamViewerId" type="text" placeholder="123 456 789" autocomplete="off">
+    <dialog class="dialog" id="settingsDialog" aria-labelledby="settingsTitle">
+      <h2 id="settingsTitle">Reglages</h2>
+      <div class="settings-actions">
+        <button class="secondary-button" id="exportSettingsButton" type="button">
+          Exporter les reglages
+        </button>
+        <label class="secondary-button import-settings">
+          Importer les reglages
+          <input id="importSettingsInput" type="file" accept="application/json,.json">
         </label>
-        <button class="secondary-button" type="submit">Enregistrer</button>
-      </form>
-      <button class="primary-button" id="closeTeamViewerButton" type="button">Retour</button>
+      </div>
+      <button class="primary-button" id="closeSettingsButton" type="button">Retour</button>
     </dialog>
 
     <dialog class="dialog wide-dialog" id="weatherDialog" aria-labelledby="weatherTitle">

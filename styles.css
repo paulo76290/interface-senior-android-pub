@@ -158,13 +158,17 @@ h2 {
   display: grid;
   width: 100%;
   gap: 18px;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-content: center;
+  grid-template-columns: repeat(3, minmax(170px, 1fr));
 }
 
 .action-tile {
+  position: relative;
   display: grid;
-  min-height: 230px;
-  align-content: space-between;
+  aspect-ratio: 1;
+  min-height: 0;
+  align-content: center;
+  justify-items: center;
   gap: 14px;
   padding: clamp(20px, 2.8vw, 30px);
   border: 1px solid rgba(215, 222, 234, 0.95);
@@ -174,8 +178,58 @@ h2 {
   color: var(--ink);
   cursor: pointer;
   font: inherit;
-  text-align: left;
+  text-align: center;
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.help-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: grid;
+  width: 30px;
+  min-height: 30px;
+  place-items: center;
+  border: 2px solid rgba(88, 101, 216, 0.28);
+  border-radius: 50%;
+  background: #fff7c2;
+  color: var(--ink);
+  cursor: help;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 8px 18px rgba(23, 32, 51, 0.12);
+}
+
+.help-badge::after {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 10px);
+  width: min(260px, 70vw);
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--ink);
+  color: white;
+  content: attr(aria-label);
+  font-size: 0.95rem;
+  font-weight: 750;
+  line-height: 1.25;
+  opacity: 0;
+  pointer-events: none;
+  text-align: left;
+  transform: translateY(4px);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.action-tile:hover .help-badge::after,
+.action-tile:focus-visible .help-badge::after,
+.utility:hover .help-badge::after,
+.utility:focus-visible .help-badge::after,
+.help-badge:hover::after {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .action-tile:focus-visible,
@@ -225,7 +279,8 @@ button:hover,
 
 .teams .brand-icon,
 .whatsapp .brand-icon,
-.photos .brand-icon {
+.photos .brand-icon,
+.web-browser .brand-icon {
   background: transparent;
 }
 
@@ -254,12 +309,13 @@ button:hover,
   font-size: clamp(1rem, 1.7vw, 1.24rem);
   font-weight: 750;
   line-height: 1.25;
+  text-align: center;
 }
 
 .lower-band {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .primary-button,
@@ -278,6 +334,7 @@ button:hover,
 }
 
 .utility {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -380,7 +437,7 @@ button:hover,
 .reorder-controls {
   position: absolute;
   right: 10px;
-  top: 48px;
+  top: 78px;
   display: grid;
   gap: 4px;
 }
@@ -430,10 +487,10 @@ button:hover,
 
 .album-link {
   display: grid;
-  min-height: 108px;
+  min-height: 132px;
   align-content: center;
   gap: 4px;
-  padding: 16px 82px 16px 16px;
+  padding: 16px 98px 16px 16px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface-soft);
@@ -559,10 +616,22 @@ button:hover,
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.ghost-button {
+.settings-actions {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.card-actions {
   position: absolute;
-  top: 10px;
+  top: 42px;
   right: 10px;
+  display: grid;
+  gap: 4px;
+  justify-items: end;
+}
+
+.ghost-button {
   min-height: 34px;
   padding: 4px 10px;
   border: 0;
@@ -576,10 +645,53 @@ button:hover,
   text-transform: uppercase;
 }
 
+.delete-button {
+  color: var(--danger);
+}
+
+.card-delete-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  width: 26px;
+  min-height: 26px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--danger);
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0;
+  box-shadow: var(--shadow-soft);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.contact-card:hover .card-delete-button,
+.contact-card:focus-within .card-delete-button {
+  opacity: 1;
+}
+
+.card-delete-button:hover,
+.card-delete-button:focus-visible {
+  background: #8f1d2f;
+  transform: scale(1.05);
+}
+
 .ghost-button:hover,
 .ghost-button:focus-visible {
   background: rgba(88, 101, 216, 0.08);
   color: var(--blue);
+}
+
+.delete-button:hover,
+.delete-button:focus-visible {
+  background: rgba(179, 38, 58, 0.08);
+  color: var(--danger);
 }
 
 .compact-button {
@@ -678,7 +790,8 @@ button:hover,
   }
 
   .action-tile {
-    min-height: 168px;
+    aspect-ratio: auto;
+    min-height: 150px;
   }
 
   .dialog-heading {

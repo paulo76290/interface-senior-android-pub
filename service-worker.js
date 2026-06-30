@@ -1,4 +1,4 @@
-const CACHE_NAME = "interface-senior-pc-v3";
+const CACHE_NAME = "interface-senior-pc-v5";
 const ASSETS = [
   "./",
   "./index.html",
@@ -8,7 +8,8 @@ const ASSETS = [
   "./icon.svg",
   "./teams-logo.svg",
   "./whatsapp-logo.svg",
-  "./photos-logo.svg"
+  "./photos-logo.svg",
+  "./internet-logo.svg"
 ];
 
 self.addEventListener("install", (event) => {
