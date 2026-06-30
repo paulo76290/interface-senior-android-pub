@@ -15,11 +15,11 @@ Pour créer un raccourci sur le bureau Windows:
 
 ## Applications
 
-Le bouton Teams permet d'ajouter des contacts avec une adresse email. Chaque contact ouvre `msteams://teams.microsoft.com/l/chat/0/0?users=prenom.nom@entreprise.com`.
+Le bouton Teams permet d'ajouter, modifier et réorganiser des contacts avec un nom et une adresse email. Chaque contact ouvre `msteams://teams.microsoft.com/l/chat/0/0?users=prenom.nom@entreprise.com`.
 
 Le bouton WhatsApp utilise `whatsapp://`. Il ouvre WhatsApp Desktop si l'application est installée et si le protocole est enregistré.
 
-Le bouton Photos ouvre une galerie locale. Les images peuvent être ajoutées depuis le sélecteur de fichiers du PC; elles sont conservées localement dans le navigateur. Des albums en ligne peuvent aussi être ajoutés avec un nom et un lien.
+Le bouton Photos ouvre une galerie locale. Les images peuvent être ajoutées depuis le sélecteur de fichiers du PC; elles sont conservées localement dans le navigateur. Des albums en ligne peuvent aussi être ajoutés, modifiés et réorganisés avec un nom et un lien.
 
 Le bouton Mail Orange ouvre `https://mail.orange.fr`.
 

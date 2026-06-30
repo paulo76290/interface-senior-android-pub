@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="fr">
   <head>
     <meta charset="utf-8">
@@ -9,13 +9,17 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <main class="tablet-shell" aria-label="Interface simplifiée pour PC">
+    <main class="tablet-shell" aria-label="Interface simplifiÃ©e pour PC">
       <section class="top-band" aria-label="Date et heure">
         <div class="clock-panel">
-          <p class="date-time-line">
+          <div class="date-time-line">
             <span class="time-now" id="timeNow">--:--</span>
             <span class="today" id="today">Bienvenue</span>
-          </p>
+          </div>
+          <button class="weather-summary" id="weatherButton" type="button">
+            <span class="weather-summary-label" id="homeWeatherLabel">Ajouter la mÃ©tÃ©o</span>
+            <span class="weather-summary-temp" id="homeWeatherTemp"></span>
+          </button>
         </div>
       </section>
 
@@ -36,24 +40,46 @@
           <span class="tile-subtitle">Lire ou envoyer un message</span>
         </a>
 
-        <button class="action-tile photos" id="photosButton" type="button" data-app="photos">
-          <span class="tile-icon">▣</span>
+                <button class="action-tile photos" id="photosButton" type="button" data-app="photos">
+          <span class="tile-icon brand-icon">
+            <img src="photos-logo.svg" alt="" aria-hidden="true">
+          </span>
           <span class="tile-title">Photos</span>
           <span class="tile-subtitle">Regarder les souvenirs</span>
         </button>
 
-        <a class="action-tile orange-mail" href="https://mail.orange.fr" data-app="orange-mail">
+        <a class="action-tile web-browser" href="https://www.google.fr" target="_blank" rel="noopener" data-app="web-browser">
+          <span class="tile-icon">⌕</span>
+          <span class="tile-title">Internet</span>
+          <span class="tile-subtitle">Ouvrir une page web</span>
+        </a>
+
+        <a class="action-tile orange-mail" href="https://mail.orange.fr" target="_blank" rel="noopener" data-app="orange-mail">
           <span class="tile-icon">✉</span>
           <span class="tile-title">Mail Orange</span>
-          <span class="tile-subtitle">Lire la boîte mail</span>
+          <span class="tile-subtitle">Lire la boite mail</span>
         </a>
+
       </section>
 
-      <section class="lower-band" aria-label="Outils utiles">
+            <section class="lower-band" aria-label="Outils utiles">
         <button class="utility danger" type="button" data-action="emergency">
           <span class="utility-icon">!</span>
           TeamViewer
         </button>
+        <button class="utility" id="teamViewerSettingsButton" type="button">
+          <span class="utility-icon">ID</span>
+          <span id="teamViewerIdSummary">ID TeamViewer</span>
+        </button>
+        <button class="utility" id="exportSettingsButton" type="button">
+          <span class="utility-icon">↓</span>
+          Exporter reglages
+        </button>
+        <label class="utility import-settings">
+          <span class="utility-icon">↑</span>
+          Importer reglages
+          <input id="importSettingsInput" type="file" accept="application/json,.json">
+        </label>
       </section>
     </main>
 
@@ -64,38 +90,92 @@
     </dialog>
 
     <dialog class="dialog wide-dialog" id="teamsDialog" aria-labelledby="teamsTitle">
-      <h2 id="teamsTitle">Teams</h2>
+      <div class="dialog-heading">
+        <div>
+          <h2 id="teamsTitle">Teams</h2>
+          <p class="dialog-subtitle">Choisir un contact pour ouvrir une conversation</p>
+        </div>
+        <button class="secondary-button compact-button" id="newTeamContactButton" type="button">Nouveau contact</button>
+      </div>
       <div class="team-list" id="teamContactList"></div>
-      <form class="album-form" id="teamContactForm">
+      <form class="album-form contact-form" id="teamContactForm" hidden>
+        <input id="teamEditIndexInput" name="teamEditIndex" type="hidden" value="">
+        <label>
+          Nom du contact
+          <input id="teamNameInput" name="teamName" type="text" placeholder="PrÃ©nom Nom" autocomplete="name">
+        </label>
         <label>
           Adresse email Teams
           <input id="teamEmailInput" name="teamEmail" type="email" placeholder="prenom.nom@entreprise.com" autocomplete="email" required>
         </label>
-        <button class="secondary-button" type="submit">Ajouter le contact</button>
+        <div class="form-actions">
+          <button class="secondary-button" id="teamSubmitButton" type="submit">Ajouter le contact</button>
+          <button class="secondary-button subtle-button" id="cancelTeamEditButton" type="button">Annuler</button>
+        </div>
       </form>
       <button class="primary-button" id="closeTeamsButton" type="button">Retour</button>
     </dialog>
 
     <dialog class="dialog wide-dialog" id="photosDialog" aria-labelledby="photosTitle">
       <h2 id="photosTitle">Photo</h2>
-      <div class="photo-gallery" id="photoGallery"></div>
-      <label class="file-button">
-        Ajouter des images
-        <input id="photoInput" type="file" accept="image/*" multiple>
-      </label>
+      <div class="section-heading-inline">
+        <h3>Liens photos</h3>
+        <div class="inline-actions">
+          <button class="secondary-button compact-button" id="newLocalFolderButton" type="button">Dossier local</button>
+        </div>
+      </div>
       <div class="online-albums" id="onlineAlbumList"></div>
-      <form class="album-form" id="onlineAlbumForm">
+      <form class="album-form contact-form" id="onlineAlbumForm" hidden>
+        <input id="onlineAlbumEditIndexInput" name="albumEditIndex" type="hidden" value="">
+        <input id="onlineAlbumTypeInput" name="albumType" type="hidden" value="local-folder">
         <label>
-          Nom de l'album
+          Nom du raccourci
           <input id="onlineAlbumNameInput" name="albumName" type="text" placeholder="Vacances 2025" autocomplete="off" required>
         </label>
         <label>
-          Lien de l'album
-          <input id="onlineAlbumUrlInput" name="albumUrl" type="url" placeholder="https://..." autocomplete="off" required>
+          Lien ou dossier
+          <input id="onlineAlbumUrlInput" name="albumUrl" type="text" placeholder="D:\Images\Photos" autocomplete="off" required>
         </label>
-        <button class="secondary-button" type="submit">Ajouter un album en ligne</button>
+        <div class="form-actions">
+          <button class="secondary-button" id="onlineAlbumSubmitButton" type="submit">Ajouter</button>
+          <button class="secondary-button subtle-button" id="cancelOnlineAlbumEditButton" type="button">Annuler</button>
+        </div>
       </form>
       <button class="primary-button" id="closePhotosButton" type="button">Retour</button>
+    </dialog>
+
+    <dialog class="dialog" id="teamViewerDialog" aria-labelledby="teamViewerTitle">
+      <h2 id="teamViewerTitle">TeamViewer</h2>
+      <p>La page ne peut pas detecter automatiquement l'ID installe. Vous pouvez le noter ici pour l'afficher sur l'accueil.</p>
+      <form class="album-form" id="teamViewerForm">
+        <label>
+          ID TeamViewer
+          <input id="teamViewerIdInput" name="teamViewerId" type="text" placeholder="123 456 789" autocomplete="off">
+        </label>
+        <button class="secondary-button" type="submit">Enregistrer</button>
+      </form>
+      <button class="primary-button" id="closeTeamViewerButton" type="button">Retour</button>
+    </dialog>
+
+    <dialog class="dialog wide-dialog" id="weatherDialog" aria-labelledby="weatherTitle">
+      <div class="dialog-heading">
+        <div>
+          <h2 id="weatherTitle">MÃ©tÃ©o</h2>
+          <p class="dialog-subtitle" id="weatherPlace">Choisir une ville</p>
+        </div>
+        <button class="secondary-button compact-button" id="refreshWeatherButton" type="button">Actualiser</button>
+      </div>
+      <div class="weather-panel" id="weatherPanel">
+        <p class="empty-message">Ajoutez une ville pour afficher la mÃ©tÃ©o.</p>
+      </div>
+      <form class="album-form" id="weatherForm">
+        <label>
+          Ville
+          <input id="weatherCityInput" name="weatherCity" type="text" placeholder="Rouen" autocomplete="address-level2" required>
+        </label>
+        <button class="secondary-button" type="submit">Enregistrer la ville</button>
+      </form>
+      <button class="primary-button" id="closeWeatherButton" type="button">Retour</button>
     </dialog>
 
     <script src="app.js"></script>

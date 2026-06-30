@@ -1,4 +1,4 @@
-const CACHE_NAME = "interface-senior-pc-v2";
+const CACHE_NAME = "interface-senior-pc-v3";
 const ASSETS = [
   "./",
   "./index.html",
@@ -7,7 +7,8 @@ const ASSETS = [
   "./manifest.webmanifest",
   "./icon.svg",
   "./teams-logo.svg",
-  "./whatsapp-logo.svg"
+  "./whatsapp-logo.svg",
+  "./photos-logo.svg"
 ];
 
 self.addEventListener("install", (event) => {

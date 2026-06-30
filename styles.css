@@ -1,23 +1,31 @@
 :root {
-  --paper: #f7f4ee;
-  --ink: #202124;
-  --muted: #5e5f63;
-  --line: #d9d2c4;
-  --blue: #4f63c6;
-  --green: #27745f;
-  --rose: #b64c62;
-  --gold: #8a641b;
-  --white: #fffdf9;
-  --shadow: 0 18px 42px rgba(45, 39, 28, 0.14);
+  --page: #eef2f7;
+  --surface: #ffffff;
+  --surface-soft: #f8fafc;
+  --ink: #172033;
+  --muted: #647084;
+  --line: #d7deea;
+  --blue: #5865d8;
+  --green: #1f8a6b;
+  --rose: #cf526b;
+  --gold: #b7831f;
+  --orange: #ff7900;
+  --danger: #b3263a;
+  --shadow: 0 18px 42px rgba(23, 32, 51, 0.13);
+  --shadow-soft: 0 8px 22px rgba(23, 32, 51, 0.08);
 }
 
 * {
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   min-height: 100%;
-  background: var(--paper);
+  background: var(--page);
   color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
   letter-spacing: 0;
@@ -34,9 +42,9 @@ body::before {
   z-index: -1;
   content: "";
   background:
-    linear-gradient(90deg, rgba(79, 99, 198, 0.10), transparent 42%),
-    linear-gradient(180deg, rgba(39, 116, 95, 0.12), transparent 36%),
-    var(--paper);
+    linear-gradient(135deg, rgba(88, 101, 216, 0.16), transparent 38%),
+    linear-gradient(225deg, rgba(31, 138, 107, 0.13), transparent 34%),
+    var(--page);
 }
 
 a {
@@ -51,51 +59,88 @@ a {
 
 .tablet-shell {
   display: grid;
+  width: min(1280px, 100%);
   min-height: 100vh;
-  gap: 22px;
-  padding: clamp(18px, 3vw, 34px);
+  margin: 0 auto;
+  gap: 24px;
+  padding: clamp(18px, 3vw, 36px);
   grid-template-rows: auto 1fr auto;
 }
 
 .top-band,
 .lower-band {
-  width: min(1180px, 100%);
-  margin-inline: auto;
+  width: 100%;
 }
 
 .top-band {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
 }
 
 .clock-panel {
-  min-width: 0;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: 100%;
+  padding: 18px 22px;
+  border: 1px solid rgba(215, 222, 234, 0.9);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--shadow-soft);
 }
 
 .date-time-line {
   display: flex;
   align-items: baseline;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 18px;
-  margin: 0;
   flex-wrap: wrap;
+  text-align: left;
 }
 
 .time-now {
   color: var(--ink);
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(2rem, 4.2vw, 3.8rem);
   font-weight: 900;
   line-height: 1;
 }
 
 .today {
   color: var(--muted);
-  font-size: clamp(1.15rem, 2.5vw, 2rem);
-  font-weight: 900;
+  font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+  font-weight: 850;
   text-transform: capitalize;
+}
+
+.weather-summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-soft);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  box-shadow: var(--shadow-soft);
+}
+
+.weather-summary-label {
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 850;
+}
+
+.weather-summary-temp {
+  color: var(--green);
+  font-size: 1.28rem;
+  font-weight: 900;
 }
 
 h2,
@@ -105,65 +150,58 @@ p {
 
 h2 {
   margin: 0;
-  font-size: clamp(1.35rem, 2.8vw, 2.15rem);
-  line-height: 1.12;
-}
-
-.small-button,
-.primary-button,
-.utility {
-  min-height: 58px;
-  border: 2px solid var(--ink);
-  border-radius: 8px;
-  background: var(--white);
-  color: var(--ink);
-  cursor: pointer;
-  font: inherit;
-  font-size: 1.18rem;
-  font-weight: 800;
-  box-shadow: 0 8px 0 rgba(32, 33, 36, 0.16);
+  font-size: clamp(1.45rem, 2.6vw, 2.1rem);
+  line-height: 1.1;
 }
 
 .quick-actions {
   display: grid;
-  width: min(1180px, 100%);
-  margin-inline: auto;
+  width: 100%;
   gap: 18px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .action-tile {
   display: grid;
-  min-height: 210px;
-  align-content: center;
-  gap: 10px;
-  padding: clamp(20px, 3vw, 34px);
-  border: 3px solid rgba(32, 33, 36, 0.9);
+  min-height: 230px;
+  align-content: space-between;
+  gap: 14px;
+  padding: clamp(20px, 2.8vw, 30px);
+  border: 1px solid rgba(215, 222, 234, 0.95);
   border-radius: 8px;
-  background: var(--white);
+  background: var(--surface);
   box-shadow: var(--shadow);
   color: var(--ink);
   cursor: pointer;
   font: inherit;
   text-align: left;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
 }
 
 .action-tile:focus-visible,
 .action-tile:hover,
 button:focus-visible,
-button:hover {
-  outline: 5px solid rgba(79, 99, 198, 0.28);
-  outline-offset: 4px;
+button:hover,
+.file-button:hover,
+.album-link:hover {
+  outline: 4px solid rgba(88, 101, 216, 0.22);
+  outline-offset: 3px;
+}
+
+.action-tile:hover {
+  border-color: rgba(88, 101, 216, 0.45);
+  box-shadow: 0 22px 48px rgba(23, 32, 51, 0.18);
+  transform: translateY(-2px);
 }
 
 .tile-icon {
   display: grid;
-  width: 74px;
+  width: 76px;
   aspect-ratio: 1;
   place-items: center;
   border-radius: 8px;
   color: white;
-  font-size: 2.4rem;
+  font-size: 2.35rem;
   font-weight: 900;
 }
 
@@ -173,8 +211,8 @@ button:hover {
 
 .brand-icon img {
   display: block;
-  width: 74px;
-  height: 74px;
+  width: 76px;
+  height: 76px;
 }
 
 .teams .tile-icon {
@@ -186,7 +224,8 @@ button:hover {
 }
 
 .teams .brand-icon,
-.whatsapp .brand-icon {
+.whatsapp .brand-icon,
+.photos .brand-icon {
   background: transparent;
 }
 
@@ -195,11 +234,15 @@ button:hover {
 }
 
 .orange-mail .tile-icon {
-  background: #ff7900;
+  background: var(--orange);
+}
+
+.web-browser .tile-icon {
+  background: var(--green);
 }
 
 .tile-title {
-  font-size: clamp(1.85rem, 3.2vw, 3.1rem);
+  font-size: clamp(1.45rem, 2.45vw, 2.35rem);
   font-weight: 900;
   line-height: 1;
   overflow-wrap: anywhere;
@@ -208,64 +251,30 @@ button:hover {
 .tile-subtitle {
   max-width: 480px;
   color: var(--muted);
-  font-size: clamp(1.08rem, 2vw, 1.38rem);
-  font-weight: 700;
+  font-size: clamp(1rem, 1.7vw, 1.24rem);
+  font-weight: 750;
   line-height: 1.25;
-}
-
-.small-button {
-  min-width: 132px;
-  padding: 8px 14px;
-  font-size: 1rem;
-}
-
-.contacts {
-  display: grid;
-  gap: 14px;
-  margin-top: 18px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.contact {
-  display: flex;
-  align-items: center;
-  min-height: 94px;
-  gap: 14px;
-  padding: 14px;
-  border: 2px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 253, 249, 0.82);
-}
-
-.contact-avatar {
-  display: grid;
-  flex: 0 0 auto;
-  width: 58px;
-  aspect-ratio: 1;
-  place-items: center;
-  border-radius: 50%;
-  background: #dfe8f9;
-  color: var(--blue);
-  font-size: 1.7rem;
-  font-weight: 900;
-}
-
-.contact-name {
-  display: block;
-  font-size: clamp(1.12rem, 2vw, 1.45rem);
-  font-weight: 900;
-}
-
-.contact-action {
-  color: var(--muted);
-  font-size: 1rem;
-  font-weight: 700;
 }
 
 .lower-band {
   display: grid;
   gap: 12px;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.primary-button,
+.secondary-button,
+.utility {
+  min-height: 58px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 850;
+  box-shadow: var(--shadow-soft);
 }
 
 .utility {
@@ -273,138 +282,258 @@ button:hover {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  min-height: 72px;
-  padding: 10px 12px;
+  min-height: 74px;
+  padding: 12px 14px;
 }
 
 .utility-icon {
-  font-size: 1.6rem;
+  display: grid;
+  width: 34px;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(179, 38, 58, 0.1);
+  font-size: 1.4rem;
 }
 
 .danger {
-  border-color: #8b1d2c;
-  color: #8b1d2c;
-}
-
-.play-store {
-  border-color: var(--green);
-  color: var(--green);
-}
-
-.play-store-icon img {
-  display: block;
-  width: 32px;
-  height: 32px;
+  border-color: rgba(179, 38, 58, 0.35);
+  color: var(--danger);
 }
 
 .dialog {
-  width: min(520px, calc(100vw - 36px));
-  border: 3px solid var(--ink);
+  width: min(540px, calc(100vw - 36px));
+  border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--white);
+  background: var(--surface);
   color: var(--ink);
   box-shadow: var(--shadow);
 }
 
 .wide-dialog {
-  width: min(760px, calc(100vw - 36px));
+  width: min(820px, calc(100vw - 36px));
 }
 
 .dialog::backdrop {
-  background: rgba(32, 33, 36, 0.44);
+  background: rgba(15, 23, 42, 0.48);
 }
 
 .dialog p {
   color: var(--muted);
-  font-size: 1.18rem;
-  font-weight: 700;
+  font-size: 1.12rem;
+  font-weight: 750;
   line-height: 1.42;
+}
+
+.dialog-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.dialog-subtitle {
+  margin: 6px 0 0;
+}
+
+.section-heading-inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.section-heading-inline h3 {
+  margin: 0;
+  font-size: 1.18rem;
+  font-weight: 900;
 }
 
 .primary-button {
   width: 100%;
-  margin-top: 10px;
-  padding: 12px 18px;
+  margin-top: 12px;
   background: var(--green);
   color: white;
 }
 
-.primary-link {
-  display: grid;
-  min-height: 62px;
-  margin-top: 16px;
-  place-items: center;
-  border: 2px solid var(--ink);
-  border-radius: 8px;
-  background: var(--blue);
-  color: white;
-  font-size: 1.18rem;
-  font-weight: 900;
-  box-shadow: 0 8px 0 rgba(32, 33, 36, 0.16);
-}
-
-.photo-gallery {
-  display: grid;
-  gap: 12px;
-  margin-top: 18px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.online-albums {
-  display: grid;
-  gap: 12px;
-  margin-top: 18px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
+.photo-gallery,
+.online-albums,
 .team-list {
   display: grid;
   gap: 12px;
   margin-top: 18px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
+}
+
+.contact-card {
+  position: relative;
+}
+
+.reorder-controls {
+  position: absolute;
+  right: 10px;
+  top: 48px;
+  display: grid;
+  gap: 4px;
+}
+
+.reorder-button {
+  display: grid;
+  width: 24px;
+  min-height: 24px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 850;
+  box-shadow: none;
+}
+
+.reorder-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
 }
 
 .local-photo {
   width: 100%;
   aspect-ratio: 4 / 3;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 8px;
   object-fit: cover;
-  background: var(--white);
+  background: var(--surface-soft);
 }
 
 .empty-message {
   grid-column: 1 / -1;
   margin: 0;
   padding: 18px;
-  border: 2px dashed var(--line);
+  border: 1px dashed var(--line);
   border-radius: 8px;
+  background: var(--surface-soft);
   color: var(--muted);
-  font-size: 1.1rem;
+  font-size: 1.08rem;
   font-weight: 800;
   text-align: center;
 }
 
 .album-link {
   display: grid;
-  min-height: 86px;
+  min-height: 108px;
   align-content: center;
   gap: 4px;
-  padding: 16px;
-  border: 2px solid var(--line);
+  padding: 16px 82px 16px 16px;
+  border: 1px solid var(--line);
   border-radius: 8px;
-  background: #fff7e4;
+  background: var(--surface-soft);
+  box-shadow: var(--shadow-soft);
 }
 
 .album-title {
-  font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+  font-size: clamp(1.28rem, 2.3vw, 1.8rem);
   font-weight: 900;
 }
 
 .album-name {
   color: var(--muted);
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 750;
+}
+
+.weather-panel {
+  margin-top: 18px;
+}
+
+.weather-current {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-soft);
+  box-shadow: var(--shadow-soft);
+}
+
+.weather-temp {
+  color: var(--ink);
+  font-size: clamp(3rem, 8vw, 5.8rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.weather-label {
+  color: var(--muted);
+  font-size: clamp(1.25rem, 2.6vw, 2rem);
+  font-weight: 850;
+  text-align: right;
+}
+
+.weather-details {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.weather-details span {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 1.02rem;
+  font-weight: 850;
+  text-align: center;
+}
+
+.hourly-forecast {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.hour-card {
+  display: grid;
+  gap: 4px;
+  min-height: 112px;
+  align-content: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.hour-time {
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 850;
+}
+
+.hour-temp {
+  color: var(--ink);
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.hour-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 750;
+  line-height: 1.2;
 }
 
 .file-button,
@@ -413,15 +542,53 @@ button:hover {
   min-height: 58px;
   margin-top: 18px;
   place-items: center;
-  border: 2px solid var(--ink);
+  border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--white);
+  background: var(--surface);
   color: var(--ink);
   cursor: pointer;
   font: inherit;
-  font-size: 1.08rem;
-  font-weight: 900;
-  box-shadow: 0 8px 0 rgba(32, 33, 36, 0.16);
+  font-size: 1.06rem;
+  font-weight: 850;
+  box-shadow: var(--shadow-soft);
+}
+
+.form-actions {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ghost-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  min-height: 34px;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.ghost-button:hover,
+.ghost-button:focus-visible {
+  background: rgba(88, 101, 216, 0.08);
+  color: var(--blue);
+}
+
+.compact-button {
+  min-width: 176px;
+  margin-top: 0;
+}
+
+.subtle-button {
+  color: var(--muted);
 }
 
 .album-form {
@@ -429,7 +596,14 @@ button:hover {
   gap: 12px;
   margin-top: 18px;
   padding-top: 18px;
-  border-top: 2px solid var(--line);
+  border-top: 1px solid var(--line);
+}
+
+.contact-form {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-soft);
 }
 
 .album-form label {
@@ -437,19 +611,25 @@ button:hover {
   gap: 6px;
   color: var(--muted);
   font-size: 1rem;
-  font-weight: 900;
+  font-weight: 850;
 }
 
 .album-form input {
   width: 100%;
   min-height: 54px;
   padding: 10px 12px;
-  border: 2px solid var(--line);
+  border: 1px solid var(--line);
   border-radius: 8px;
+  background: var(--surface-soft);
   color: var(--ink);
   font: inherit;
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 750;
+}
+
+.album-form input:focus {
+  outline: 4px solid rgba(88, 101, 216, 0.18);
+  border-color: rgba(88, 101, 216, 0.62);
 }
 
 .secondary-button {
@@ -463,35 +643,73 @@ button:hover {
   opacity: 0;
 }
 
-@media (max-width: 760px) {
+.import-settings {
+  position: relative;
+}
+
+.import-settings input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 980px) {
+  .quick-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
   .tablet-shell {
     gap: 16px;
     padding: 14px;
   }
 
-  .top-band {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .small-button {
-    width: 100%;
-  }
-
   .quick-actions,
-  .contacts,
   .lower-band,
   .photo-gallery,
   .online-albums,
-  .team-list {
+  .team-list,
+  .form-actions,
+  .weather-details {
     grid-template-columns: 1fr;
   }
 
   .action-tile {
-    min-height: 170px;
+    min-height: 168px;
   }
 
-  .lower-band {
-    padding-bottom: 10px;
+  .dialog-heading {
+    display: grid;
+  }
+
+  .section-heading-inline {
+    display: grid;
+  }
+
+  .compact-button {
+    width: 100%;
+  }
+
+  .weather-current {
+    display: grid;
+  }
+
+  .clock-panel {
+    display: grid;
+  }
+
+  .weather-label {
+    text-align: left;
+  }
+
+  .weather-summary {
+    width: 100%;
+  }
+
+  .hourly-forecast {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
