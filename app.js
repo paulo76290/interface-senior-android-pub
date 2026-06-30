@@ -66,7 +66,7 @@ function saveTeamContacts() {
 }
 
 function createTeamsChatUrl(email) {
-  return `https://teams.microsoft.com/l/chat/0/0?users=${email}`;
+  return `msteams://teams.microsoft.com/l/chat/0/0?users=${email}`;
 }
 
 function createContactTitle(email) {

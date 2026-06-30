@@ -15,7 +15,7 @@ Pour créer un raccourci sur le bureau Windows:
 
 ## Applications
 
-Le bouton Teams permet d'ajouter des contacts avec une adresse email. Chaque contact ouvre `https://teams.microsoft.com/l/chat/0/0?users=prenom.nom@entreprise.com`.
+Le bouton Teams permet d'ajouter des contacts avec une adresse email. Chaque contact ouvre `msteams://teams.microsoft.com/l/chat/0/0?users=prenom.nom@entreprise.com`.
 
 Le bouton WhatsApp utilise `whatsapp://`. Il ouvre WhatsApp Desktop si l'application est installée et si le protocole est enregistré.
 
