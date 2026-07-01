@@ -151,55 +151,47 @@ function createTeamsWebUrl(email) {
 
 function createTeamsChatUrl(email) {
   const cleanEmail = email.trim();
-  const teamsPath = `teams.microsoft.com/l/chat/0/0?users=${cleanEmail}`;
 
-  if (/Android/i.test(navigator.userAgent)) {
-    return [
-      `intent://${teamsPath}`,
-      "#Intent;scheme=msteams",
-      ";package=com.microsoft.teams",
-      `;S.browser_fallback_url=${encodeURIComponent(createTeamsWebUrl(cleanEmail))}`,
-      ";end"
-    ].join("");
+  if (isMobileDevice) {
+    return createTeamsWebUrl(cleanEmail);
   }
 
-  return `msteams://${teamsPath}`;
+  return `msteams://teams.microsoft.com/l/chat/0/0?users=${cleanEmail}`;
 }
 
 function getWhatsAppUrl() {
-  if (/Android/i.test(navigator.userAgent)) {
-    return [
-      "intent://send/",
-      "#Intent;scheme=whatsapp",
-      ";package=com.whatsapp",
-      ";S.browser_fallback_url=https%3A%2F%2Fwa.me%2F",
-      ";end"
-    ].join("");
+  if (isMobileDevice) {
+    return "https://wa.me/";
   }
 
-  if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    return "whatsapp://send";
-  }
-
-  return "whatsapp://";
+  return "https://web.whatsapp.com/";
 }
 
 function getTeamViewerUrl() {
+  return isMobileDevice ? "teamviewerqs://" : "teamviewer10://";
+}
+
+function getTeamViewerFallbackUrl() {
   if (/Android/i.test(navigator.userAgent)) {
-    return [
-      "intent://",
-      "#Intent;scheme=teamviewerqs",
-      ";package=com.teamviewer.quicksupport.market",
-      ";S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.teamviewer.quicksupport.market",
-      ";end"
-    ].join("");
+    return "https://play.google.com/store/apps/details?id=com.teamviewer.quicksupport.market";
   }
 
   if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    return "teamviewerqs://";
+    return "https://apps.apple.com/app/teamviewer-quicksupport/id661649585";
   }
 
-  return "teamviewer10://";
+  return "https://www.teamviewer.com/download/";
+}
+
+function openWithFallback(primaryUrl, fallbackUrl) {
+  const startedAt = Date.now();
+  window.location.href = primaryUrl;
+
+  window.setTimeout(() => {
+    if (Date.now() - startedAt < 1600 && !document.hidden) {
+      window.location.href = fallbackUrl;
+    }
+  }, 1200);
 }
 
 function refreshAdaptiveLinks() {
@@ -802,7 +794,7 @@ document.querySelectorAll("[data-action]").forEach((button) => {
     const action = button.dataset.action;
 
     if (action === "emergency") {
-      window.location.href = getTeamViewerUrl();
+      openWithFallback(getTeamViewerUrl(), getTeamViewerFallbackUrl());
       return;
     }
   });
