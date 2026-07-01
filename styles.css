@@ -775,12 +775,20 @@ button:hover,
 
 @media (max-width: 640px) {
   .tablet-shell {
-    gap: 16px;
-    padding: 14px;
+    gap: 14px;
+    padding: 12px;
   }
 
-  .quick-actions,
-  .lower-band,
+  .quick-actions {
+    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lower-band {
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .photo-gallery,
   .online-albums,
   .team-list,
@@ -790,8 +798,44 @@ button:hover,
   }
 
   .action-tile {
-    aspect-ratio: auto;
-    min-height: 150px;
+    aspect-ratio: 1;
+    min-height: 0;
+    gap: 8px;
+    padding: 14px 10px;
+  }
+
+  .tile-icon,
+  .brand-icon img {
+    width: 58px;
+    height: 58px;
+  }
+
+  .tile-title {
+    font-size: clamp(1.05rem, 5vw, 1.45rem);
+  }
+
+  .tile-subtitle {
+    font-size: 0.86rem;
+    line-height: 1.15;
+  }
+
+  .help-badge {
+    top: 7px;
+    right: 7px;
+    width: 26px;
+    min-height: 26px;
+    font-size: 0.9rem;
+  }
+
+  .help-badge::after {
+    right: -8px;
+    width: min(230px, 82vw);
+  }
+
+  .utility {
+    min-height: 66px;
+    padding: 10px 8px;
+    font-size: 0.98rem;
   }
 
   .dialog-heading {
@@ -812,6 +856,8 @@ button:hover,
 
   .clock-panel {
     display: grid;
+    gap: 12px;
+    padding: 14px;
   }
 
   .weather-label {
@@ -825,4 +871,16 @@ button:hover,
   .hourly-forecast {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+body.is-mobile .tablet-shell {
+  width: 100%;
+}
+
+body.is-mobile .quick-actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.is-mobile .action-tile {
+  aspect-ratio: 1;
 }

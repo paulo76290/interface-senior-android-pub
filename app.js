@@ -62,6 +62,19 @@ const timeFormatter = new Intl.DateTimeFormat("fr-BE", {
 let onlineAlbums = loadOnlineAlbums();
 let teamContacts = loadTeamContacts();
 let weatherCity = localStorage.getItem(WEATHER_CITY_STORAGE_KEY) || "";
+let isMobileDevice = detectMobileDevice();
+
+function detectMobileDevice() {
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) ||
+    window.matchMedia("(pointer: coarse)").matches ||
+    window.matchMedia("(max-width: 760px)").matches;
+}
+
+function applyDeviceMode() {
+  isMobileDevice = detectMobileDevice();
+  document.body.classList.toggle("is-mobile", isMobileDevice);
+  document.body.classList.toggle("is-desktop", !isMobileDevice);
+}
 
 function updateClock() {
   const now = new Date();
@@ -69,8 +82,14 @@ function updateClock() {
   todayEl.textContent = dateFormatter.format(now);
 }
 
+applyDeviceMode();
+refreshAdaptiveLinks();
 updateClock();
 setInterval(updateClock, 30000);
+window.addEventListener("resize", () => {
+  applyDeviceMode();
+  refreshAdaptiveLinks();
+});
 
 function showNotice(message) {
   noticeText.textContent = message;
@@ -127,7 +146,31 @@ function saveTeamContacts() {
 }
 
 function createTeamsChatUrl(email) {
-  return `msteams://teams.microsoft.com/l/chat/0/0?users=${email}`;
+  return `msteams://teams.microsoft.com/l/chat/0/0?users=${encodeURIComponent(email)}`;
+}
+
+function getWhatsAppUrl() {
+  return isMobileDevice ? "whatsapp://send" : "whatsapp://";
+}
+
+function getTeamViewerUrl() {
+  if (/Android/i.test(navigator.userAgent)) {
+    return "intent://#Intent;scheme=teamviewerqs;package=com.teamviewer.quicksupport.market;end";
+  }
+
+  if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    return "teamviewerqs://";
+  }
+
+  return "teamviewer10://";
+}
+
+function refreshAdaptiveLinks() {
+  const whatsAppLink = document.querySelector("[data-app='whatsapp']");
+
+  if (whatsAppLink) {
+    whatsAppLink.href = getWhatsAppUrl();
+  }
 }
 
 function createContactTitle(email) {
@@ -157,7 +200,7 @@ function renderTeamContacts() {
     const contactLink = document.createElement("a");
     contactLink.className = "album-link";
     contactLink.href = createTeamsChatUrl(contact.email);
-    contactLink.target = "_blank";
+    contactLink.target = isMobileDevice ? "_self" : "_blank";
     contactLink.rel = "noopener";
 
     const contactName = document.createElement("span");
@@ -722,7 +765,7 @@ document.querySelectorAll("[data-action]").forEach((button) => {
     const action = button.dataset.action;
 
     if (action === "emergency") {
-      window.location.href = "teamviewer10://";
+      window.location.href = getTeamViewerUrl();
       return;
     }
   });
