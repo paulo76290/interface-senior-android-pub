@@ -145,17 +145,54 @@ function saveTeamContacts() {
   localStorage.setItem(TEAM_CONTACT_STORAGE_KEY, JSON.stringify(teamContacts));
 }
 
+function createTeamsWebUrl(email) {
+  return `https://teams.microsoft.com/l/chat/0/0?users=${encodeURIComponent(email)}`;
+}
+
 function createTeamsChatUrl(email) {
-  return `msteams://teams.microsoft.com/l/chat/0/0?users=${encodeURIComponent(email)}`;
+  const cleanEmail = email.trim();
+  const teamsPath = `teams.microsoft.com/l/chat/0/0?users=${cleanEmail}`;
+
+  if (/Android/i.test(navigator.userAgent)) {
+    return [
+      `intent://${teamsPath}`,
+      "#Intent;scheme=msteams",
+      ";package=com.microsoft.teams",
+      `;S.browser_fallback_url=${encodeURIComponent(createTeamsWebUrl(cleanEmail))}`,
+      ";end"
+    ].join("");
+  }
+
+  return `msteams://${teamsPath}`;
 }
 
 function getWhatsAppUrl() {
-  return isMobileDevice ? "whatsapp://send" : "whatsapp://";
+  if (/Android/i.test(navigator.userAgent)) {
+    return [
+      "intent://send/",
+      "#Intent;scheme=whatsapp",
+      ";package=com.whatsapp",
+      ";S.browser_fallback_url=https%3A%2F%2Fwa.me%2F",
+      ";end"
+    ].join("");
+  }
+
+  if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    return "whatsapp://send";
+  }
+
+  return "whatsapp://";
 }
 
 function getTeamViewerUrl() {
   if (/Android/i.test(navigator.userAgent)) {
-    return "intent://#Intent;scheme=teamviewerqs;package=com.teamviewer.quicksupport.market;end";
+    return [
+      "intent://",
+      "#Intent;scheme=teamviewerqs",
+      ";package=com.teamviewer.quicksupport.market",
+      ";S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.teamviewer.quicksupport.market",
+      ";end"
+    ].join("");
   }
 
   if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
